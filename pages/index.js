@@ -469,18 +469,30 @@ export default function SilentOperators() {
     if (!chatInput.trim()) return;
     const userMsg = chatInput.trim();
     setChatInput("");
-    setChatMessages(prev => [...prev, { role: "user", content: userMsg }]);
+    const newMessages = [...chatMessages, { role: "user", content: userMsg }];
+    setChatMessages(newMessages);
     setIsTyping(true);
-    setTimeout(() => {
-      const responses = [
-        `Operational analysis of your query:\n\nThis connects directly to cognitive bias exploitation — specifically the intersection of anchoring effects and frame control. Most people operate on autopilot, running System 1 heuristics. Your job is to engineer the frame before their conscious mind activates.\n\nProtocol:\n1. Identify the target's primary decision heuristic\n2. Anchor their reference point before presenting your position\n3. Use strategic contrast to make your desired outcome feel inevitable\n4. Deploy social proof as the final compliance trigger\n\nThe CIA's behavioral influence research confirms this sequence works across cultures. The key variable is timing — anchor before they form their own reference point.\n\nDirective: Map this framework to your specific situation and report back with the variables.`,
-        `Noted. Deconstructing.\n\nYou're operating at the surface layer. Let me take you deeper.\n\nEvery human interaction is a frame negotiation. The person who controls the frame controls the reality of the exchange. This isn't metaphor — it's neuroscience. The prefrontal cortex constructs reality based on contextual frames, not raw data.\n\nThe operational implication: Stop trying to win arguments with logic. Logic is post-hoc rationalization. Instead, control the emotional frame, and the "logical" conclusion becomes inevitable.\n\nThree vectors for frame installation:\n• Environmental priming — control the context before the conversation\n• Presupposition stacking — embed your desired conclusion in your questions\n• Emotional anchoring — attach your position to the target's identity\n\nThis is Protocol 3 from the Influence Architecture. The technique has a 73% compliance rate in controlled studies.\n\nWhat specific scenario are you deploying this in?`,
-        `Clinical assessment:\n\nThe pattern you're describing is a textbook case of cognitive dissonance resolution. The target's brain is experiencing two conflicting inputs and will resolve toward whichever direction requires less psychological energy.\n\nYour leverage point is the path of least resistance.\n\nHere's the framework the intelligence community uses — the OODA Loop applied to social dynamics:\n\n1. OBSERVE — Map their current beliefs and emotional state without revealing yours\n2. ORIENT — Identify the gap between where they are and where you need them\n3. DECIDE — Choose the lowest-friction path to bridge that gap\n4. ACT — Execute with precision. One move. No hesitation.\n\nThe critical error most operatives make: they try to change beliefs directly. That triggers resistance. Instead, change the context around the belief, and the belief updates itself.\n\nYour move: Define the specific belief you're targeting and I'll map the approach vector.`,
-      ];
-      setChatMessages(prev => [...prev, { role: "assistant", content: responses[Math.floor(Math.random() * responses.length)] }]);
-      setIsTyping(false);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: newMessages.map(m => ({ role: m.role, content: m.content })),
+          profile: user.profile || null,
+        }),
+      });
+
+      if (!res.ok) throw new Error("API error");
+
+      const data = await res.json();
+      setChatMessages(prev => [...prev, { role: "assistant", content: data.response }]);
       addXP(15);
-    }, 2000 + Math.random() * 2000);
+    } catch (err) {
+      setChatMessages(prev => [...prev, { role: "assistant", content: "System error. Intelligence feed temporarily disrupted. Retry your query." }]);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   // ── PSYCH COMPLETION ──
