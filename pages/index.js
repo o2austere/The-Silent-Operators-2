@@ -704,6 +704,77 @@ const LESSON_CONTENT = {
 };
 
 // ═══════════════════════════════════════════════════════════════
+// RANK CHALLENGES — Must pass to level up
+// ═══════════════════════════════════════════════════════════════
+
+const RANK_CHALLENGES = {
+  2: { // Observer → Analyst
+    name: "ANALYST CLEARANCE EXAM",
+    desc: "Prove basic comprehension of psychological frameworks and influence principles",
+    requiredScore: 70,
+    xpReward: 200,
+    questions: [
+      { type: "mc", q: "System 1 processing handles approximately what percentage of human decisions?", opts: ["50%", "75%", "95%", "100%"], correct: 2 },
+      { type: "tf", q: "People make purchasing decisions based primarily on rational analysis.", correct: false },
+      { type: "mc", q: "The anchoring effect works because:", opts: ["People are lazy", "The first information received creates a reference point that biases all subsequent judgments", "People always choose the first option", "Anchors are physical objects that ground people"], correct: 1 },
+      { type: "scenario", q: "You're about to negotiate a salary. Applying what you know about anchoring, what should you do?", opts: ["Wait for them to name a number first", "State your desired number first to set the anchor high", "Ask what the average salary is", "Avoid discussing numbers"], correct: 1 },
+      { type: "tf", q: "Homeostasis only affects the body, not the mind.", correct: false },
+      { type: "mc", q: "The 'consideration set' in consumer psychology means:", opts: ["All products available", "The brands already in someone's mind before they research", "Items on a shopping list", "Products recommended by friends"], correct: 1 },
+      { type: "tf", q: "Pride after achieving a goal is dangerous because it creates comfort, which kills the urgency that created the achievement.", correct: true },
+      { type: "scenario", q: "A friend keeps cycling between extreme motivation and total collapse. Based on the Flip The Floor framework, the core problem is:", opts: ["Lack of willpower", "Their identity baseline hasn't shifted — behavior changes but the operating system stays the same", "They need better goals", "They're not trying hard enough"], correct: 1 },
+      { type: "mc", q: "What does Cialdini's principle of reciprocity exploit?", opts: ["People's desire for authority", "The psychological obligation to return favors", "Fear of missing out", "Need for social approval"], correct: 1 },
+      { type: "tf", q: "The strongest frame in a social interaction belongs to the person who speaks the loudest.", correct: false },
+    ]
+  },
+  3: { // Analyst → Strategist
+    name: "STRATEGIST CLEARANCE EXAM",
+    desc: "Demonstrate applied knowledge of persuasion architecture and behavioral systems",
+    requiredScore: 75,
+    xpReward: 400,
+    questions: [
+      { type: "scenario", q: "You're writing a sales page. Based on primal brain theory, your opening should:", opts: ["List all product features", "Start with a statistic about market size", "Address a personal, survival-relevant pain point", "Explain your company history"], correct: 2 },
+      { type: "mc", q: "The Willingness to Purchase (WTPu) signal in the brain does what after an offer is made?", opts: ["Drops to zero", "Spikes and then plateaus at an elevated level", "Stays the same as before", "Only activates at checkout"], correct: 1 },
+      { type: "tf", q: "Cognitive dissonance resolution means the brain aligns beliefs to reduce internal conflict — making it the highest form of persuasion because the target convinces themselves.", correct: true },
+      { type: "scenario", q: "Someone uses the door-in-the-face technique on you. They first ask for a massive favor, then make a smaller request. The correct defense is:", opts: ["Automatically say yes to the smaller request", "Evaluate the smaller request independently, ignoring the contrast with the first", "Feel guilty and comply", "Get angry"], correct: 1 },
+      { type: "mc", q: "The 6 primal brain stimuli are: Personal, Contrastable, Tangible, Memorable, Visual, and:", opts: ["Logical", "Repetitive", "Emotional", "Complex"], correct: 2 },
+      { type: "tf", q: "Visual elements become MORE powerful than words in the later stages of a sales interaction.", correct: true },
+      { type: "mc", q: "The Benjamin Franklin Effect states:", opts: ["Save a penny, earn a penny", "Asking someone for a favor makes THEM like YOU more", "Being generous always pays off", "First impressions are everything"], correct: 1 },
+      { type: "scenario", q: "You're building a personal brand. Based on brand psychology, the most important thing to establish first is:", opts: ["A website with all your services", "Emotional connection and trust — feelings are at the core of brand essence", "Competitive pricing", "A large social media following"], correct: 1 },
+      { type: "tf", q: "Manufactured urgency — creating the F-T-E feeling deliberately while you're still successful — is more effective than waiting for rock bottom.", correct: true },
+      { type: "mc", q: "Mirror neurons are relevant to influence because:", opts: ["They help you memorize things", "Observing someone's actions creates unconscious simulation and rapport", "They reflect light in the eyes", "They only work in children"], correct: 1 },
+      { type: "scenario", q: "Your customer is in high-involvement purchase mode. Based on consumer psychology, what's the most critical factor?", opts: ["Having the lowest price", "Being in their consideration set before they start researching", "Having the most features", "Running the most ads"], correct: 1 },
+      { type: "tf", q: "Loss aversion means losses feel approximately 2x stronger than equivalent gains.", correct: true },
+    ]
+  },
+  4: { // Strategist → Operator
+    name: "OPERATOR CLEARANCE EXAM",
+    desc: "Advanced assessment — only operators who can synthesize across pillars will pass",
+    requiredScore: 80,
+    xpReward: 600,
+    questions: [
+      { type: "scenario", q: "You need to influence a group decision in a meeting. Applying frame control + social proof + primal brain theory, your optimal sequence is:", opts: ["Present data and let them decide", "Set the frame before the meeting, prime key allies, present your position as the safe default", "Speak last and loudest", "Send an email afterward"], correct: 1 },
+      { type: "mc", q: "Self-perception theory combined with labeling theory means:", opts: ["People know themselves perfectly", "If you get someone to ACT a certain way AND label them as that type of person, they internalize the identity", "Labels are meaningless", "Self-perception is always accurate"], correct: 1 },
+      { type: "tf", q: "The path of least cognitive resistance determines which direction someone's beliefs will shift when experiencing dissonance.", correct: true },
+      { type: "scenario", q: "An operative detects they're being anchored in a negotiation. Protocol:", opts: ["Accept the anchor", "Counter-anchor by stating your own extreme number before acknowledging theirs", "Walk away immediately", "Pretend not to notice"], correct: 1 },
+      { type: "mc", q: "Combining dopamine engineering with consumer psychology: why do subscription models reduce 'pain of paying'?", opts: ["They're cheaper", "Separating payment from consumption reduces the neurological pain response of each transaction", "People forget they're paying", "Credit cards make it invisible"], correct: 1 },
+      { type: "tf", q: "Congruence — where your words, body language, and energy all communicate the same message — is the foundation of presence and undetectable influence.", correct: true },
+      { type: "scenario", q: "An operative's streak has broken and they're spiraling into the 'devil' phase. Based on the full Flip The Floor + neurochemistry framework:", opts: ["Wait for the F-T-E event naturally", "Execute the identity anchor protocol immediately — visualization, check-in, recalibrate baseline — don't negotiate with the old self", "Take a week off to recover", "Set easier goals"], correct: 1 },
+      { type: "mc", q: "The OODA loop applied to social dynamics stands for:", opts: ["Observe, Orient, Decide, Act", "Organize, Optimize, Deploy, Analyze", "Open, Operate, Deliver, Assess", "Observe, Overcome, Decide, Advance"], correct: 0 },
+      { type: "tf", q: "The strongest frame in any interaction belongs to the person with the least emotional reactivity.", correct: true },
+      { type: "scenario", q: "You're building a community product. Based on everything — brand psychology, tribal compliance, identity engineering — the core retention mechanism should be:", opts: ["Discounts for loyalty", "A ranked identity system where members' self-concept becomes tied to their progress within the community", "More content", "Better customer support"], correct: 1 },
+    ]
+  },
+};
+
+const STREAK_TIERS = [
+  { min: 1, label: "—", color: "#333" },
+  { min: 3, label: "1.5x XP", color: "#d4a017" },
+  { min: 7, label: "2x XP", color: "#dc2626" },
+  { min: 14, label: "2.5x XP", color: "#8b5cf6" },
+  { min: 30, label: "3x XP", color: "#16a34a" },
+];
+
+// ═══════════════════════════════════════════════════════════════
 // SYSTEM PROMPT
 // ═══════════════════════════════════════════════════════════════
 
@@ -837,6 +908,9 @@ export default function SilentOperators() {
     completedLessons: [],
     completedQuizzes: {},
     courseProgress: {},
+    streak: 1,
+    lastActiveDate: new Date().toDateString(),
+    rankChallengesPassed: [],
   });
 
   // Chat state
@@ -937,6 +1011,35 @@ export default function SilentOperators() {
   const totalQuestions = PSYCH_SECTIONS.reduce((a, s) => a + s.questions.length, 0);
   const answeredQuestions = Object.keys(psychAnswers).length;
 
+  // Rank challenge state
+  const [rankChallenge, setRankChallenge] = useState(null);
+
+  // Streak tracking
+  useEffect(() => {
+    const today = new Date().toDateString();
+    if (user.lastActiveDate !== today) {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const wasYesterday = user.lastActiveDate === yesterday.toDateString();
+      setUser(prev => ({
+        ...prev,
+        streak: wasYesterday ? prev.streak + 1 : 1,
+        lastActiveDate: today,
+      }));
+    }
+  }, []);
+
+  const streakMultiplier = user.streak >= 30 ? 3 : user.streak >= 14 ? 2.5 : user.streak >= 7 ? 2 : user.streak >= 3 ? 1.5 : 1;
+
+  const addXP = useCallback((amount) => {
+    const boosted = Math.round(amount * streakMultiplier);
+    setUser(prev => {
+      const newXP = prev.xp + boosted;
+      const newLevel = RANKS.reduce((acc, r) => newXP >= r.xp ? r.level : acc, 0);
+      return { ...prev, xp: newXP, level: newLevel, tokens: prev.tokens + Math.floor(boosted / 10) };
+    });
+  }, [streakMultiplier]);
+
   useEffect(() => {
     if (showIntro) {
       const t = [
@@ -952,14 +1055,6 @@ export default function SilentOperators() {
   }, [showIntro]);
 
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [chatMessages, isTyping]);
-
-  const addXP = useCallback((amount) => {
-    setUser(prev => {
-      const newXP = prev.xp + amount;
-      const newLevel = RANKS.reduce((acc, r) => newXP >= r.xp ? r.level : acc, 0);
-      return { ...prev, xp: newXP, level: newLevel, tokens: prev.tokens + Math.floor(amount / 10) };
-    });
-  }, []);
 
   // ── AI CHAT ──
   const sendMessage = async () => {
@@ -1059,17 +1154,35 @@ export default function SilentOperators() {
   };
 
   const submitQuiz = () => {
-    const { questions, answers, quizId } = quizState;
+    const { questions, answers, quizId, isRankChallenge, rankLevel, requiredScore } = quizState;
     let correct = 0;
-    questions.forEach((q, i) => { if (answers[i] === q.correct) correct++; });
+    questions.forEach((q, i) => {
+      const qType = q.type || "mc";
+      if (qType === "tf") {
+        if (answers[i] === q.correct) correct++;
+      } else {
+        if (answers[i] === q.correct) correct++;
+      }
+    });
     const score = Math.round((correct / questions.length) * 100);
     setQuizState(prev => ({ ...prev, score }));
-    setUser(prev => ({
-      ...prev,
-      completedQuizzes: { ...prev.completedQuizzes, [quizId]: score },
-      completedLessons: [...prev.completedLessons, quizId],
-    }));
-    addXP(score >= 80 ? 100 : score >= 60 ? 50 : 20);
+
+    if (isRankChallenge) {
+      if (score >= requiredScore) {
+        setUser(prev => ({
+          ...prev,
+          rankChallengesPassed: [...prev.rankChallengesPassed, rankLevel],
+        }));
+        addXP(RANK_CHALLENGES[rankLevel]?.xpReward || 200);
+      }
+    } else {
+      setUser(prev => ({
+        ...prev,
+        completedQuizzes: { ...prev.completedQuizzes, [quizId]: score },
+        completedLessons: [...prev.completedLessons, quizId],
+      }));
+      addXP(score >= 80 ? 100 : score >= 60 ? 50 : 20);
+    }
   };
 
   // ═══════════════════════════════════════════════════════════════
@@ -1221,7 +1334,7 @@ export default function SilentOperators() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginBottom: 8 }}>
               {[
                 { label: "XP", value: user.xp, color: currentRank.color },
-                { label: "TOKENS", value: user.tokens, color: "#d4a017" },
+                { label: "STREAK", value: `${user.streak}d`, sub: streakMultiplier > 1 ? `${streakMultiplier}x` : null, color: user.streak >= 7 ? "#dc2626" : user.streak >= 3 ? "#d4a017" : "#333" },
                 { label: "CLEARANCE", value: `${user.level}`, color: "#dc2626" },
                 { label: "COURSES", value: user.completedLessons.length, color: "#3b82f6" },
               ].map((stat, i) => (
@@ -1231,6 +1344,7 @@ export default function SilentOperators() {
                 }}>
                   <div style={{ fontSize: 7, letterSpacing: 3, color: "#222", marginBottom: 6 }}>{stat.label}</div>
                   <div style={{ fontSize: 16, fontWeight: 300, color: stat.color, letterSpacing: 1 }}>{stat.value}</div>
+                  {stat.sub && <div style={{ fontSize: 7, color: stat.color, marginTop: 2, letterSpacing: 2 }}>{stat.sub}</div>}
                 </div>
               ))}
             </div>
@@ -1664,7 +1778,14 @@ export default function SilentOperators() {
             </button>
 
             <div style={{ marginBottom: 16 }}>
-              <div style={{ fontSize: 7, letterSpacing: 4, color: "#dc2626", marginBottom: 4 }}>KNOWLEDGE VERIFICATION</div>
+              <div style={{ fontSize: 7, letterSpacing: 4, color: "#dc2626", marginBottom: 4 }}>
+                {quizState.isRankChallenge ? "RANK CLEARANCE EXAM" : "KNOWLEDGE VERIFICATION"}
+              </div>
+              {quizState.isRankChallenge && (
+                <div style={{ fontSize: 9, color: "#d4a017", marginBottom: 6, fontWeight: 300 }}>
+                  Required score: {quizState.requiredScore}% to pass
+                </div>
+              )}
               <div style={{ fontSize: 12, color: "#d0d0d0", fontWeight: 300, letterSpacing: 2, marginBottom: 8 }}>
                 Q{quizState.current + 1} of {quizState.questions.length}
               </div>
@@ -1672,108 +1793,174 @@ export default function SilentOperators() {
                 <div style={{
                   height: "100%",
                   width: `${((quizState.current + 1) / quizState.questions.length) * 100}%`,
-                  background: "#dc2626", borderRadius: 1, transition: "width 0.3s", opacity: 0.7,
+                  background: quizState.isRankChallenge ? "#d4a017" : "#dc2626", borderRadius: 1, transition: "width 0.3s", opacity: 0.7,
                 }} />
               </div>
             </div>
 
-            <div style={{
-              border: "1px solid #0e0e0e", borderRadius: 8, padding: 20,
-              background: "#070707",
-            }}>
-              <div style={{ fontSize: 11, color: "#ccc", lineHeight: 1.7, fontWeight: 300, marginBottom: 18 }}>
-                {quizState.questions[quizState.current].q}
-              </div>
-
-              {quizState.questions[quizState.current].opts.map((opt, oi) => (
-                <button key={oi} onClick={() => answerQuiz(quizState.current, oi)} style={{
-                  width: "100%", textAlign: "left", padding: "12px 14px",
-                  marginBottom: 6, borderRadius: 6, cursor: "pointer",
-                  fontFamily: "inherit", fontSize: 10, fontWeight: 300,
-                  background: quizState.answers[quizState.current] === oi ? "#dc262611" : "#060606",
-                  border: quizState.answers[quizState.current] === oi ? "1px solid #dc262633" : "1px solid #0e0e0e",
-                  color: quizState.answers[quizState.current] === oi ? "#dc2626" : "#777",
-                  transition: "all 0.2s", letterSpacing: 0.3,
+            {(() => {
+              const currentQ = quizState.questions[quizState.current];
+              const qType = currentQ.type || "mc";
+              return (
+                <div style={{
+                  border: "1px solid #0e0e0e", borderRadius: 8, padding: 20,
+                  background: "#070707",
                 }}>
-                  <span style={{ color: "#333", marginRight: 10 }}>{String.fromCharCode(65 + oi)}.</span>
-                  {opt}
-                </button>
-              ))}
+                  {/* Question type badge */}
+                  <div style={{ fontSize: 7, letterSpacing: 3, marginBottom: 10, color: qType === "scenario" ? "#8b5cf6" : qType === "tf" ? "#0891b2" : "#333" }}>
+                    {qType === "scenario" ? "◆ SCENARIO" : qType === "tf" ? "◇ TRUE OR FALSE" : "◈ KNOWLEDGE CHECK"}
+                  </div>
 
-              <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16 }}>
-                <button onClick={() => quizState.current > 0 && setQuizState(prev => ({ ...prev, current: prev.current - 1 }))} style={{
-                  padding: "8px 16px", background: "transparent", border: "1px solid #111",
-                  borderRadius: 4, color: "#333", cursor: quizState.current > 0 ? "pointer" : "default",
-                  fontFamily: "inherit", fontSize: 8, letterSpacing: 2,
-                  opacity: quizState.current > 0 ? 1 : 0.3,
-                }}>
-                  ← PREV
-                </button>
+                  <div style={{ fontSize: 11, color: "#ccc", lineHeight: 1.7, fontWeight: 300, marginBottom: 18 }}>
+                    {currentQ.q}
+                  </div>
 
-                {quizState.current < quizState.questions.length - 1 ? (
-                  <button onClick={() => quizState.answers[quizState.current] !== undefined && setQuizState(prev => ({ ...prev, current: prev.current + 1 }))} style={{
-                    padding: "8px 16px", background: "transparent", border: "1px solid #111",
-                    borderRadius: 4, color: "#777", cursor: "pointer",
-                    fontFamily: "inherit", fontSize: 8, letterSpacing: 2,
-                    opacity: quizState.answers[quizState.current] !== undefined ? 1 : 0.3,
-                  }}>
-                    NEXT →
-                  </button>
-                ) : (
-                  <button onClick={() => {
-                    const allAnswered = quizState.questions.every((_, i) => quizState.answers[i] !== undefined);
-                    if (allAnswered) submitQuiz();
-                  }} style={{
-                    padding: "8px 16px",
-                    background: quizState.questions.every((_, i) => quizState.answers[i] !== undefined) ? "#dc2626" : "transparent",
-                    border: "1px solid #dc262644", borderRadius: 4,
-                    color: quizState.questions.every((_, i) => quizState.answers[i] !== undefined) ? "#000" : "#333",
-                    cursor: "pointer", fontFamily: "inherit", fontSize: 8, letterSpacing: 2, fontWeight: 600,
-                  }}>
-                    SUBMIT
-                  </button>
-                )}
-              </div>
-            </div>
+                  {/* TRUE/FALSE questions */}
+                  {qType === "tf" && (
+                    <div style={{ display: "flex", gap: 8 }}>
+                      {[true, false].map(val => (
+                        <button key={String(val)} onClick={() => answerQuiz(quizState.current, val)} style={{
+                          flex: 1, padding: "14px", borderRadius: 6, cursor: "pointer",
+                          fontFamily: "inherit", fontSize: 11, fontWeight: 400, letterSpacing: 2,
+                          background: quizState.answers[quizState.current] === val ? (val ? "#16a34a15" : "#dc262611") : "#060606",
+                          border: quizState.answers[quizState.current] === val ? `1px solid ${val ? "#16a34a33" : "#dc262633"}` : "1px solid #0e0e0e",
+                          color: quizState.answers[quizState.current] === val ? (val ? "#16a34a" : "#dc2626") : "#555",
+                          transition: "all 0.2s", textAlign: "center",
+                        }}>
+                          {val ? "TRUE" : "FALSE"}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* MC and SCENARIO questions */}
+                  {(qType === "mc" || qType === "scenario") && currentQ.opts && currentQ.opts.map((opt, oi) => (
+                    <button key={oi} onClick={() => answerQuiz(quizState.current, oi)} style={{
+                      width: "100%", textAlign: "left", padding: "12px 14px",
+                      marginBottom: 6, borderRadius: 6, cursor: "pointer",
+                      fontFamily: "inherit", fontSize: 10, fontWeight: 300,
+                      background: quizState.answers[quizState.current] === oi ? (qType === "scenario" ? "#8b5cf611" : "#dc262611") : "#060606",
+                      border: quizState.answers[quizState.current] === oi ? `1px solid ${qType === "scenario" ? "#8b5cf633" : "#dc262633"}` : "1px solid #0e0e0e",
+                      color: quizState.answers[quizState.current] === oi ? (qType === "scenario" ? "#8b5cf6" : "#dc2626") : "#777",
+                      transition: "all 0.2s", letterSpacing: 0.3, lineHeight: 1.6,
+                    }}>
+                      <span style={{ color: "#333", marginRight: 10 }}>{String.fromCharCode(65 + oi)}.</span>
+                      {opt}
+                    </button>
+                  ))}
+
+                  <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16 }}>
+                    <button onClick={() => quizState.current > 0 && setQuizState(prev => ({ ...prev, current: prev.current - 1 }))} style={{
+                      padding: "8px 16px", background: "transparent", border: "1px solid #111",
+                      borderRadius: 4, color: "#333", cursor: quizState.current > 0 ? "pointer" : "default",
+                      fontFamily: "inherit", fontSize: 8, letterSpacing: 2,
+                      opacity: quizState.current > 0 ? 1 : 0.3,
+                    }}>
+                      ← PREV
+                    </button>
+
+                    {quizState.current < quizState.questions.length - 1 ? (
+                      <button onClick={() => quizState.answers[quizState.current] !== undefined && setQuizState(prev => ({ ...prev, current: prev.current + 1 }))} style={{
+                        padding: "8px 16px", background: "transparent", border: "1px solid #111",
+                        borderRadius: 4, color: "#777", cursor: "pointer",
+                        fontFamily: "inherit", fontSize: 8, letterSpacing: 2,
+                        opacity: quizState.answers[quizState.current] !== undefined ? 1 : 0.3,
+                      }}>
+                        NEXT →
+                      </button>
+                    ) : (
+                      <button onClick={() => {
+                        const allAnswered = quizState.questions.every((_, i) => quizState.answers[i] !== undefined);
+                        if (allAnswered) submitQuiz();
+                      }} style={{
+                        padding: "8px 16px",
+                        background: quizState.questions.every((_, i) => quizState.answers[i] !== undefined) ? "#dc2626" : "transparent",
+                        border: "1px solid #dc262644", borderRadius: 4,
+                        color: quizState.questions.every((_, i) => quizState.answers[i] !== undefined) ? "#000" : "#333",
+                        cursor: "pointer", fontFamily: "inherit", fontSize: 8, letterSpacing: 2, fontWeight: 600,
+                      }}>
+                        SUBMIT
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         )}
 
         {/* ── QUIZ RESULTS ── */}
         {quizState && quizState.score !== null && (
           <div style={{ animation: "fadeIn 0.5s ease", textAlign: "center", padding: "40px 0" }}>
-            <div style={{ fontSize: 7, letterSpacing: 4, color: "#333", marginBottom: 16 }}>ASSESSMENT COMPLETE</div>
+            <div style={{ fontSize: 7, letterSpacing: 4, color: "#333", marginBottom: 16 }}>
+              {quizState.isRankChallenge ? "CLEARANCE EXAM COMPLETE" : "ASSESSMENT COMPLETE"}
+            </div>
             <div style={{
               fontSize: 48, fontWeight: 200, marginBottom: 8,
-              color: quizState.score >= 80 ? "#16a34a" : quizState.score >= 60 ? "#d4a017" : "#dc2626",
+              color: quizState.score >= (quizState.requiredScore || 80) ? "#16a34a" : quizState.score >= 60 ? "#d4a017" : "#dc2626",
             }}>
               {quizState.score}%
             </div>
-            <div style={{ fontSize: 10, letterSpacing: 3, marginBottom: 8, color: "#555", fontWeight: 300 }}>
-              {quizState.score >= 80 ? "KNOWLEDGE VERIFIED" : quizState.score >= 60 ? "PARTIAL COMPREHENSION" : "REVIEW REQUIRED"}
-            </div>
-            <div style={{ fontSize: 9, color: "#333", marginBottom: 24 }}>
-              +{quizState.score >= 80 ? 100 : quizState.score >= 60 ? 50 : 20} XP earned
-            </div>
+
+            {quizState.isRankChallenge ? (
+              <div style={{ marginBottom: 16 }}>
+                {quizState.score >= quizState.requiredScore ? (
+                  <>
+                    <div style={{ fontSize: 12, letterSpacing: 4, color: "#d4a017", marginBottom: 4, fontWeight: 400 }}>
+                      CLEARANCE GRANTED
+                    </div>
+                    <div style={{ fontSize: 9, color: "#555", fontWeight: 300 }}>
+                      +{RANK_CHALLENGES[quizState.rankLevel]?.xpReward || 200} XP · Rank unlocked
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div style={{ fontSize: 12, letterSpacing: 4, color: "#dc2626", marginBottom: 4, fontWeight: 400 }}>
+                      CLEARANCE DENIED
+                    </div>
+                    <div style={{ fontSize: 9, color: "#555", fontWeight: 300 }}>
+                      Required: {quizState.requiredScore}% · Review material and retry
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <>
+                <div style={{ fontSize: 10, letterSpacing: 3, marginBottom: 4, color: "#555", fontWeight: 300 }}>
+                  {quizState.score >= 80 ? "KNOWLEDGE VERIFIED" : quizState.score >= 60 ? "PARTIAL COMPREHENSION" : "REVIEW REQUIRED"}
+                </div>
+                <div style={{ fontSize: 9, color: "#333", marginBottom: 8 }}>
+                  +{Math.round((quizState.score >= 80 ? 100 : quizState.score >= 60 ? 50 : 20) * streakMultiplier)} XP earned
+                  {streakMultiplier > 1 && <span style={{ color: "#d4a017" }}> ({streakMultiplier}x streak)</span>}
+                </div>
+              </>
+            )}
 
             {/* Show correct/incorrect */}
             <div style={{ textAlign: "left", maxWidth: 500, margin: "0 auto" }}>
               {quizState.questions.map((q, i) => {
-                const correct = quizState.answers[i] === q.correct;
+                const qType = q.type || "mc";
+                const isCorrect = quizState.answers[i] === q.correct;
+                const correctAnswer = qType === "tf" ? (q.correct ? "True" : "False") : (q.opts ? q.opts[q.correct] : "");
                 return (
                   <div key={i} style={{
                     padding: "10px 14px", marginBottom: 4, borderRadius: 6,
-                    background: "#070707", border: `1px solid ${correct ? "#16a34a15" : "#dc262615"}`,
+                    background: "#070707", border: `1px solid ${isCorrect ? "#16a34a15" : "#dc262615"}`,
                     fontSize: 9, color: "#555", fontWeight: 300,
                   }}>
-                    <span style={{ color: correct ? "#16a34a" : "#dc2626", marginRight: 8 }}>
-                      {correct ? "✓" : "✗"}
-                    </span>
-                    {q.q.substring(0, 60)}...
-                    {!correct && (
-                      <div style={{ fontSize: 8, color: "#16a34a", marginTop: 4, opacity: 0.7 }}>
-                        Correct: {q.opts[q.correct]}
+                    <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+                      <span style={{ color: isCorrect ? "#16a34a" : "#dc2626", flexShrink: 0 }}>
+                        {isCorrect ? "✓" : "✗"}
+                      </span>
+                      <div>
+                        <span style={{ color: "#666" }}>{q.q.length > 70 ? q.q.substring(0, 70) + "..." : q.q}</span>
+                        {!isCorrect && (
+                          <div style={{ fontSize: 8, color: "#16a34a", marginTop: 4, opacity: 0.7 }}>
+                            Correct: {correctAnswer}
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
                 );
               })}
@@ -1784,7 +1971,7 @@ export default function SilentOperators() {
               border: "1px solid #111", borderRadius: 6, color: "#555",
               cursor: "pointer", fontFamily: "inherit", fontSize: 9, letterSpacing: 2,
             }}>
-              RETURN TO COURSE
+              {quizState.isRankChallenge ? "RETURN TO ORDER" : "RETURN TO COURSE"}
             </button>
           </div>
         )}
@@ -2081,7 +2268,7 @@ export default function SilentOperators() {
         {/* ════════════════════════════════════════════════════ */}
         {/* RANKS VIEW */}
         {/* ════════════════════════════════════════════════════ */}
-        {view === "ranks" && (
+        {view === "ranks" && !quizState && (
           <div style={{ animation: "fadeIn 0.5s ease" }}>
             <div style={{ textAlign: "center", marginBottom: 24 }}>
               <div style={{ fontSize: 7, letterSpacing: 4, color: "#222", marginBottom: 4 }}>THE ORDER</div>
@@ -2089,19 +2276,55 @@ export default function SilentOperators() {
                 CLEARANCE HIERARCHY
               </div>
               <div style={{ fontSize: 9, color: "#222", fontWeight: 300 }}>
-                Each rank unlocks deeper intelligence. There are no shortcuts.
+                Each rank unlocks deeper intelligence. Pass the clearance exam to advance.
+              </div>
+            </div>
+
+            {/* Streak Display */}
+            <div style={{
+              border: "1px solid #0e0e0e", borderRadius: 8, padding: 16,
+              background: "#070707", marginBottom: 16, textAlign: "center",
+            }}>
+              <div style={{ fontSize: 7, letterSpacing: 4, color: "#222", marginBottom: 8 }}>STREAK PROTOCOL</div>
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12 }}>
+                <div style={{ fontSize: 28, fontWeight: 200, color: user.streak >= 7 ? "#dc2626" : user.streak >= 3 ? "#d4a017" : "#444" }}>
+                  {user.streak}
+                </div>
+                <div style={{ textAlign: "left" }}>
+                  <div style={{ fontSize: 9, color: "#666", fontWeight: 300 }}>consecutive days</div>
+                  <div style={{ fontSize: 8, color: streakMultiplier > 1 ? "#d4a017" : "#333", letterSpacing: 2 }}>
+                    {streakMultiplier > 1 ? `${streakMultiplier}x XP MULTIPLIER ACTIVE` : "3-day streak → 1.5x XP"}
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: "flex", justifyContent: "center", gap: 4, marginTop: 10 }}>
+                {STREAK_TIERS.map((tier, i) => (
+                  <div key={i} style={{
+                    padding: "3px 8px", borderRadius: 3, fontSize: 7, letterSpacing: 1,
+                    background: user.streak >= tier.min ? `${tier.color}15` : "#060606",
+                    border: `1px solid ${user.streak >= tier.min ? tier.color + "33" : "#0e0e0e"}`,
+                    color: user.streak >= tier.min ? tier.color : "#222",
+                  }}>
+                    {tier.min}d: {tier.label}
+                  </div>
+                ))}
               </div>
             </div>
 
             {RANKS.slice(1).map((rank) => {
               const unlocked = user.xp >= rank.xp;
               const current = rank.level === currentRank.level;
+              const challenge = RANK_CHALLENGES[rank.level];
+              const challengePassed = user.rankChallengesPassed.includes(rank.level);
+              const canTakeChallenge = current && challenge && !challengePassed && user.xp >= rank.xp;
+              const nextRankIsThis = nextRank.level === rank.level;
+
               return (
                 <div key={rank.level} style={{
                   border: current ? `1px solid ${rank.color}22` : "1px solid #0e0e0e",
                   borderRadius: 8, padding: 18, marginBottom: 6,
                   background: current ? `${rank.color}05` : "#070707",
-                  opacity: unlocked ? 1 : 0.25, transition: "all 0.3s",
+                  opacity: unlocked || nextRankIsThis ? 1 : 0.25, transition: "all 0.3s",
                 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
@@ -2118,7 +2341,7 @@ export default function SilentOperators() {
                         </div>
                       </div>
                     </div>
-                    <div>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
                       {current && (
                         <span style={{
                           fontSize: 7, letterSpacing: 3, color: rank.color,
@@ -2128,9 +2351,41 @@ export default function SilentOperators() {
                           CURRENT
                         </span>
                       )}
-                      {!unlocked && <span style={{ fontSize: 12, color: "#1a1a1a" }}>🔒</span>}
+                      {challengePassed && (
+                        <span style={{ fontSize: 7, letterSpacing: 2, color: "#16a34a" }}>✓ EXAM PASSED</span>
+                      )}
+                      {!unlocked && !nextRankIsThis && <span style={{ fontSize: 12, color: "#1a1a1a" }}>🔒</span>}
                     </div>
                   </div>
+
+                  {/* Rank Challenge Button */}
+                  {challenge && (unlocked || nextRankIsThis) && !challengePassed && (
+                    <button onClick={() => {
+                      setQuizState({
+                        quizId: `rank-${rank.level}`,
+                        questions: challenge.questions,
+                        current: 0,
+                        answers: {},
+                        score: null,
+                        isRankChallenge: true,
+                        rankLevel: rank.level,
+                        requiredScore: challenge.requiredScore,
+                      });
+                    }} style={{
+                      width: "100%", marginTop: 12, padding: "10px 14px",
+                      background: canTakeChallenge ? "#d4a01711" : "#060606",
+                      border: `1px solid ${canTakeChallenge ? "#d4a01733" : "#0e0e0e"}`,
+                      borderRadius: 6, cursor: "pointer", fontFamily: "inherit",
+                      textAlign: "left", transition: "all 0.3s",
+                    }}>
+                      <div style={{ fontSize: 8, letterSpacing: 3, color: "#d4a017", marginBottom: 3 }}>
+                        ◈ {challenge.name}
+                      </div>
+                      <div style={{ fontSize: 8, color: "#333", fontWeight: 300 }}>
+                        {challenge.desc} · {challenge.questions.length} questions · {challenge.requiredScore}% to pass
+                      </div>
+                    </button>
+                  )}
                 </div>
               );
             })}
