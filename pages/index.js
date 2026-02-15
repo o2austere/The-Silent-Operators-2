@@ -615,6 +615,95 @@ const QUIZ_BANK = {
 };
 
 // ═══════════════════════════════════════════════════════════════
+// LESSON CONTENT DATABASE
+// ═══════════════════════════════════════════════════════════════
+
+const LESSON_CONTENT = {
+  // ── FLIP THE FLOOR ──
+  "ftf-1-1": {
+    title: "The Devil & The Angel — Your Two Operating Systems",
+    sections: [
+      { heading: "THE CORE TRUTH", body: "You have two sides. Two polar opposites running inside you at all times. One exists to destroy you. To keep you average. To drag you back into comfort, distraction, and mediocrity. The other strives for growth, unmatched ambition, drive and creativity.\n\nYou've heard the devil and angel metaphor. This isn't a metaphor. This is your operating system." },
+      { heading: "THE DEVIL", body: "The part that makes you go to bed late — not because you're building your business, but because you're scrolling TikTok for hours. Watching childhood YouTubers. Trying to ignite the nostalgia of being a kid again.\n\nThis is the pit. The rut. Self-esteem at rock bottom. Only wanting to go outside when it's dark, when no one can see you. Your old self has come back to haunt you." },
+      { heading: "THE ANGEL", body: "Then a few days, a few weeks later — you're back. Locked in. Saying you'll never stop. On monk mode with monk-like discipline. Saying no to distractions. Implementing what you know you should be doing.\n\nBut here's the cycle: another week or month goes by, and the devil finds his strength again. You break the promises you made to yourself. The resistance wraps around you so tight you can't escape it." },
+      { heading: "THE PATTERN", body: "This cycle — up and down, devil and angel, locked in then falling apart — is happening to you right now. It's endlessly frustrating because as soon as you enter your godlike self, you're just waiting for the devil to find his strength.\n\nDepression. Self-hatred. Confidence at an all-time low. It haunts and dictates your life.\n\nBut every successful person has been through this. The difference is they understood the mechanics behind it. That's what you're about to learn." },
+    ],
+  },
+  "ftf-1-2": {
+    title: "Why Does The Devil Come Back?",
+    sections: [
+      { heading: "THE MECHANISM", body: "The devil comes back because your brain is designed to return to baseline. This isn't a character flaw. This is neuroscience.\n\nYour mind has a set point — like a thermostat. When you rise above it through discipline and effort, your brain treats this as an anomaly. It starts pulling you back down. Not because growth is wrong, but because your identity hasn't caught up to your behavior." },
+      { heading: "THE SUCCESS TRAP", body: "Here's what nobody tells you: success itself triggers the regression. You hit a goal. You feel proud. That pride creates comfort. That comfort kills the urgency that got you there.\n\nThe moment you feel comfortable, the real you surfaces — the version that still identifies with the old baseline. And you fall back to that. Every single time." },
+      { heading: "THE REAL ENEMY", body: "The devil isn't laziness. The devil isn't a lack of discipline. The devil is an identity that hasn't been upgraded.\n\nYou're running new software on old hardware. The behavior changes, but the operating system stays the same. Until you change the operating system itself, the cycle will continue." },
+    ],
+  },
+  "ftf-1-3": {
+    title: "The Fluctuation of Identities",
+    sections: [
+      { heading: "THE GRAPH", body: "Picture a graph. Your behavior oscillates up and down over time, like a sine wave. High points where you're locked in. Low points where the devil takes control.\n\nThe key insight: there's a red line through the middle. That red line is your baseline — your norm. Your default identity. And no matter how high you climb, you keep getting pulled back to it." },
+      { heading: "WHAT THE FLUCTUATION LOOKS LIKE", body: "Week 1: Motivated. Gym every day. Business tasks done. Diet clean. Feeling unstoppable.\n\nWeek 3: Starting to slip. One missed workout. One late night scrolling. One day of 'I'll start again tomorrow.'\n\nWeek 5: Full rut. The devil has the wheel. Everything you built feels like it belongs to someone else.\n\nWeek 7: Rock bottom. The F-T-E event hits. You can't live like this anymore. And you climb again.\n\nThis is not random. This is a predictable cycle with predictable mechanics. And once you understand the mechanics, you can break it." },
+      { heading: "THE IDENTITY GAP", body: "The fluctuation exists because there's a gap between who you're trying to become and who you believe you are. Your behavior can temporarily exceed your identity, but identity always wins in the end.\n\nThink of it like a rubber band. You can stretch it upward through effort and discipline, but if you don't anchor it at the new level, it snaps back.\n\nThe entire purpose of this course is to teach you how to anchor at higher and higher levels — until your baseline is unrecognizable." },
+    ],
+  },
+  "ftf-2-1": {
+    title: "Understanding Homeostasis in the Mind",
+    sections: [
+      { heading: "THE SCIENCE", body: "Homeostasis: when your body is too hot, it cools you down. When your body is too cold, it heats you up. Your body constantly regulates to maintain a set point.\n\nThis same mechanism runs your psychology.\n\nWhen your room gets too dirty, you'll eventually clean it. When you're broke with nothing in the bank, you'll go into ultra-save mode. When the discomfort gets bad enough, your brain forces a correction." },
+      { heading: "THE RED LINE", body: "Focus on that red line — your baseline. Your norm. Your default state.\n\nWhen you leave mugs on your desk for a week, plates with leftover food from the night before, your baseline starts dropping. Lower and lower until the 'norm' becomes chaos.\n\nThen it gets so bad that your brain steps in and regulates. It forces you to clean up. To bring the red line back to the middle.\n\nThis graph applies to every single aspect of your life. Health. Money. Relationships. Discipline. Everything." },
+      { heading: "MENTAL HOMEOSTASIS", body: "The critical realization: homeostasis is as mental as it is physical. It's not just about body temperature. It's about your brain giving you the F-T-E event when you've sunk too low. It's about the urgent feeling that forces you to change.\n\nBut here's the problem — homeostasis works in BOTH directions. It pulls you back down when you rise too high, AND it pushes you back up when you sink too low. It's a survival mechanism that keeps you at baseline.\n\nThe game isn't to fight homeostasis. The game is to MOVE the baseline." },
+    ],
+  },
+  "ftf-2-2": {
+    title: "The Cycle of the 4 Emotions",
+    sections: [
+      { heading: "THE FOUR STATES", body: "Your emotional cycle moves through four predictable states. Understanding these is the key to predicting when the devil will return — and stopping it.\n\n1. URGENCY — The bottom. Rock bottom energy. 'I can't live like this.' This is rocket fuel.\n2. MOMENTUM — You're climbing. Discipline is high. Results are showing. Feels unstoppable.\n3. PRIDE — The peak. You've achieved something. You feel good about yourself. This is where the trap is set.\n4. COMFORT — Pride breeds comfort. Comfort kills urgency. And without urgency, regression begins." },
+      { heading: "THE TRAP", body: "Pride is the most dangerous emotion in the cycle. Not because it's bad — but because it's the signal that regression is about to begin.\n\nThe moment you feel proud, you've subconsciously told yourself 'I've made it.' And the brain responds by reducing the drive that got you there.\n\nComfort follows pride like a shadow. And comfort is where the devil lives." },
+      { heading: "THE PROTOCOL", body: "When you detect pride: immediately raise the standard. Don't celebrate the win — redefine the floor.\n\nWhen you detect comfort: manufacture urgency. Find the next level. Create discomfort deliberately.\n\nThe operators who never fall are the ones who never let pride settle. They treat every achievement as the new minimum, not the destination." },
+    ],
+  },
+  "ftf-2-3": {
+    title: "The F-T-E Event — Rock Bottom as Rocket Fuel",
+    sections: [
+      { heading: "THE TROUGH", body: "The F-T-E — the 'Fuck This' Event. When your life gets so unbearable that you have no choice but to change. You can't live like this anymore. It's hell.\n\nYour body screams at you with urgency. So you change.\n\nYou use the negative emotions as momentum. As rocket fuel. The pain of where you are becomes the propulsion toward where you need to be." },
+      { heading: "THE PROBLEM WITH F-T-E", body: "Most people rely on the F-T-E to create change. They wait for rock bottom to motivate them.\n\nThis is a terrible strategy. Because it means you need to suffer before you can grow. You need to fall before you can climb.\n\nThe goal is to learn to generate urgency WITHOUT hitting rock bottom. To manufacture the F-T-E feeling while you're still at the top. That's what separates operators from civilians." },
+      { heading: "MANUFACTURED URGENCY", body: "The protocol: when everything is going well, ask yourself — 'If I stop right now, where will I be in 6 months?'\n\nVisualize the regression. Feel the discomfort of losing everything you've built. Use that imagined pain as fuel, the same way the F-T-E uses real pain.\n\nThis is the advanced technique. You no longer need to fall to generate the energy to climb. You create the urgency from within." },
+    ],
+  },
+  "ftf-3-1": {
+    title: "Who Are You? — Creating Your Game Character",
+    sections: [
+      { heading: "THE IDENTITY EXERCISE", body: "Right now, you might be seen as average. Someone who isn't taken seriously. But imagine this — you move to a new city. A new country. Nobody knows who you are.\n\nHow would you act?\n\nYou can operate as anyone you want to be. And people will believe that's who you are. If you acted as the 10k/month entrepreneur — people would see you as the 10k/month entrepreneur. And so would you." },
+      { heading: "THE GAME CHARACTER", body: "Think of your life like a video game. You're building a character. How would this character move? How would he carry himself?\n\nConfident. Training consistently. Eating clean. Handling business. Because he sees himself as that person already.\n\nAnd when others perceive you that way, the belief solidifies in your own head. It becomes harder to contradict.\n\nStop hoping for completion of anything in life. The person you need to become doesn't wait for conditions to be perfect. He operates now, as the finished version." },
+      { heading: "THE SHIFT", body: "The difference between people who stay stuck in the cycle and people who break free: the ones who break free decided who they are FIRST, then acted accordingly.\n\nThey didn't wait to feel confident to act confident. They didn't wait to be successful to act like a success. The identity came first. The results followed.\n\nWrite down who you're becoming. In detail. How he moves, what he does, what he refuses to tolerate. Then start operating as that person today. Not tomorrow. Today." },
+    ],
+  },
+  "ftf-3-2": {
+    title: "Making Success the Standard",
+    sections: [
+      { heading: "THE FLOOR FLIP", body: "This is the core technique. Every time you achieve something — no matter how small — you flip the floor.\n\nThat means: what you just achieved is no longer a goal. It's your new minimum. Your new baseline. The new red line on the graph.\n\nYou don't celebrate it as a peak. You establish it as the floor. And then you look up at the next level." },
+      { heading: "THE CHECKLIST", body: "Every time you hit a goal, run through this:\n\n1. Do I feel proud? If yes — that's the warning light. Pride creates comfort creates regression.\n2. Is this my new baseline or am I treating it as an achievement? If it feels like an achievement, you haven't flipped the floor yet.\n3. What's the next level above this? Define it immediately. Don't sit at the current level for more than 24 hours.\n4. Am I feeling discomfort? If not, you're about to regress. Raise the standard." },
+      { heading: "THE COMPRESSION", body: "Six months of consistent floor-flipping compresses the fluctuation. You'll still have ups and downs — but the range gets smaller.\n\nInstead of swinging from heaven to hell, you oscillate between good and great. Your bad days become better than your old good days.\n\nThat's the endgame. A baseline so high that even your worst day would look like a dream to the old version of you." },
+    ],
+  },
+  "ftf-3-3": {
+    title: "The Identity Anchor — Becoming Unshakeable",
+    sections: [
+      { heading: "WHY YOU STILL SLIP", body: "You understand the cycle. The fluctuation. The homeostasis. The devil and angel. You can see the pattern clearly.\n\nBut you still slip. Why?\n\nBecause understanding isn't identity. You can understand the cycle intellectually while being controlled by it emotionally. Knowing how a trap works doesn't mean you won't walk into it.\n\nWhat you need is an anchor. Something so deeply embedded in who you are that the old patterns can't pull you back." },
+      { heading: "THE ANCHOR", body: "Write this down somewhere you'll see every day:\n\n'I am the person who [your goal]. I act accordingly. I don't negotiate with the old version. My floor is where others see their ceiling.'\n\nRead it every morning. Read it every night. This is your anchor. When everything feels chaotic, when the old patterns are pulling hard — come back to this statement." },
+      { heading: "THE THREE DAILY PROTOCOLS", body: "1. MORNING VISUALIZATION (10 min): Before you check your phone. Sit in silence. Step into the identity of who you're becoming. See the bank account. Feel the car door handle. Walk through the house. Make it vivid. Your subconscious can't tell the difference.\n\n2. IDENTITY CHECK-INS (3x daily): Set three alarms. When they go off, ask: 'Am I acting as the person who already has what I want?' If no — correct immediately.\n\n3. EVENING AUDIT (5 min): Before bed. Where did you slip? Where did the old identity try to take control? Don't judge. Collect data. Then visualize tomorrow." },
+    ],
+  },
+  "ftf-3-4": {
+    title: "The Floor Flip Protocol — Daily Execution System",
+    sections: [
+      { heading: "THE SYSTEM", body: "Knowledge without execution is entertainment. This module exists to make sure everything you've learned becomes a system you run daily.\n\nThe Floor Flip Protocol is your daily operating system. It takes everything from this course — the identity shift, the homeostasis awareness, the emotional cycle, the anchor — and turns it into executable steps." },
+      { heading: "DAILY PROTOCOL", body: "MORNING:\n• Wake at set time (non-negotiable)\n• 10-minute visualization before phone\n• Read identity anchor statement\n• Ask: 'What would the person I'm becoming do today?'\n• Execute first task within 15 minutes of waking\n\nMIDDAY:\n• Identity check-in alarm\n• Assess: am I operating as the higher self or has the devil started creeping?\n• If slipping — immediate correction, no negotiation\n\nEVENING:\n• Audit the day — collect data, don't judge\n• Identify any pride or comfort signals\n• Set tomorrow's floor flip target\n• Visualize tomorrow's execution" },
+      { heading: "THE FINAL WORD", body: "You now have everything you need. Not everything you'll ever learn. But everything you need to start.\n\nThe gap between where you are and where you want to be isn't closed by information. It's closed by execution.\n\nSo close this lesson. And go act as the person you just spent hours learning about.\n\nDon't wait until you feel ready. Readiness is a trap. The old identity will always tell you that you need more time.\n\nYou don't. You need to move. Now.\n\nFlip the floor." },
+    ],
+  },
+};
+
+// ═══════════════════════════════════════════════════════════════
 // SYSTEM PROMPT
 // ═══════════════════════════════════════════════════════════════
 
@@ -768,10 +857,80 @@ export default function SilentOperators() {
   // Pillar assessment state
   const [pillarAssessing, setPillarAssessing] = useState(null);
   const [pillarAnswers, setPillarAnswers] = useState({});
+  const [lessonChat, setLessonChat] = useState([]);
+  const [lessonChatInput, setLessonChatInput] = useState("");
+  const [lessonTyping, setLessonTyping] = useState(false);
+  const lessonChatRef = useRef(null);
 
   // Boot
   const [showIntro, setShowIntro] = useState(true);
   const [bootPhase, setBootPhase] = useState(0);
+
+  // Focus mode (4Hz theta binaural beat)
+  const [focusMode, setFocusMode] = useState(false);
+  const audioCtxRef = useRef(null);
+  const oscLeftRef = useRef(null);
+  const oscRightRef = useRef(null);
+  const gainRef = useRef(null);
+
+  const toggleFocusMode = useCallback(() => {
+    if (!focusMode) {
+      // Start 4Hz binaural beat (200Hz left ear, 204Hz right ear = 4Hz difference)
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const gainNode = ctx.createGain();
+      gainNode.gain.value = 0.08;
+      
+      const merger = ctx.createChannelMerger(2);
+      
+      const oscL = ctx.createOscillator();
+      oscL.type = "sine";
+      oscL.frequency.value = 200;
+      
+      const oscR = ctx.createOscillator();
+      oscR.type = "sine";
+      oscR.frequency.value = 204;
+      
+      const gainL = ctx.createGain();
+      const gainR = ctx.createGain();
+      gainL.gain.value = 1;
+      gainR.gain.value = 1;
+      
+      oscL.connect(gainL);
+      oscR.connect(gainR);
+      gainL.connect(merger, 0, 0);
+      gainR.connect(merger, 0, 1);
+      merger.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      
+      oscL.start();
+      oscR.start();
+      
+      audioCtxRef.current = ctx;
+      oscLeftRef.current = oscL;
+      oscRightRef.current = oscR;
+      gainRef.current = gainNode;
+      setFocusMode(true);
+    } else {
+      // Stop
+      if (oscLeftRef.current) oscLeftRef.current.stop();
+      if (oscRightRef.current) oscRightRef.current.stop();
+      if (audioCtxRef.current) audioCtxRef.current.close();
+      audioCtxRef.current = null;
+      oscLeftRef.current = null;
+      oscRightRef.current = null;
+      gainRef.current = null;
+      setFocusMode(false);
+    }
+  }, [focusMode]);
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (oscLeftRef.current) try { oscLeftRef.current.stop(); } catch(e) {}
+      if (oscRightRef.current) try { oscRightRef.current.stop(); } catch(e) {}
+      if (audioCtxRef.current) try { audioCtxRef.current.close(); } catch(e) {}
+    };
+  }, []);
 
   const currentRank = RANKS.reduce((acc, r) => user.xp >= r.xp ? r : acc, RANKS[0]);
   const nextRank = RANKS.find(r => r.xp > user.xp) || RANKS[RANKS.length - 1];
@@ -832,6 +991,43 @@ export default function SilentOperators() {
       setIsTyping(false);
     }
   };
+
+  // ── LESSON AI CHAT ──
+  const sendLessonMessage = async () => {
+    if (!lessonChatInput.trim() || !activeLesson) return;
+    const userMsg = lessonChatInput.trim();
+    setLessonChatInput("");
+    const newMessages = [...lessonChat, { role: "user", content: userMsg }];
+    setLessonChat(newMessages);
+    setLessonTyping(true);
+
+    const lessonContent = LESSON_CONTENT[activeLesson.id];
+    const contextText = lessonContent ? lessonContent.sections.map(s => `${s.heading}: ${s.body}`).join("\n\n") : "";
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [
+            { role: "user", content: `[CONTEXT: The operative is currently studying the lesson "${activeLesson.title}" from the course "${activeCourse.title}". Here is the lesson content:\n\n${contextText}\n\nAnswer their question based on this lesson. Stay in the operator voice. Be specific to the material.]` },
+            { role: "assistant", content: "Understood. I have the lesson loaded. Ready for the operative's question." },
+            ...newMessages.map(m => ({ role: m.role, content: m.content })),
+          ],
+          profile: user.profile || null,
+        }),
+      });
+      if (!res.ok) throw new Error("API error");
+      const data = await res.json();
+      setLessonChat(prev => [...prev, { role: "assistant", content: data.response }]);
+    } catch (err) {
+      setLessonChat(prev => [...prev, { role: "assistant", content: "Intelligence feed disrupted. Retry." }]);
+    } finally {
+      setLessonTyping(false);
+    }
+  };
+
+  useEffect(() => { lessonChatRef.current?.scrollIntoView({ behavior: "smooth" }); }, [lessonChat, lessonTyping]);
 
   // ── PSYCH COMPLETION ──
   const completePsychAssessment = () => {
@@ -952,6 +1148,21 @@ export default function SilentOperators() {
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          {/* Focus Mode Toggle */}
+          <button onClick={toggleFocusMode} title={focusMode ? "Disable 4Hz Focus Frequency" : "Enable 4Hz Focus Frequency (use headphones)"} style={{
+            background: focusMode ? "#dc262615" : "transparent",
+            border: focusMode ? "1px solid #dc262633" : "1px solid #111",
+            borderRadius: 6, padding: "6px 10px", cursor: "pointer",
+            display: "flex", alignItems: "center", gap: 6,
+            transition: "all 0.3s", fontFamily: "inherit",
+          }}>
+            <span style={{ fontSize: 12, color: focusMode ? "#dc2626" : "#333" }}>
+              {focusMode ? "◉" : "○"}
+            </span>
+            <span style={{ fontSize: 7, letterSpacing: 2, color: focusMode ? "#dc2626" : "#333" }}>
+              {focusMode ? "4Hz ON" : "FOCUS"}
+            </span>
+          </button>
           <div style={{ textAlign: "right" }}>
             <div style={{ fontSize: 7, color: "#333", letterSpacing: 3 }}>CLEARANCE</div>
             <div style={{ fontSize: 10, color: currentRank.color, letterSpacing: 3, fontWeight: 300 }}>
@@ -1275,7 +1486,7 @@ export default function SilentOperators() {
         {/* ── LESSON VIEW ── */}
         {view === "courses" && activeLesson && (
           <div style={{ animation: "fadeIn 0.5s ease" }}>
-            <button onClick={() => setActiveLesson(null)} style={{
+            <button onClick={() => { setActiveLesson(null); setLessonChat([]); setLessonChatInput(""); }} style={{
               background: "transparent", border: "none", color: "#333",
               cursor: "pointer", fontSize: 9, letterSpacing: 2, marginBottom: 16,
               fontFamily: "inherit", padding: 0,
@@ -1283,38 +1494,158 @@ export default function SilentOperators() {
               ← BACK TO COURSE
             </button>
 
+            {/* Lesson Header */}
             <div style={{
-              border: "1px solid #0e0e0e", borderRadius: 8, padding: 24,
-              background: "#070707", marginBottom: 16,
+              border: "1px solid #0e0e0e", borderRadius: 8, padding: 20,
+              background: "linear-gradient(135deg, #080808, #060606)", marginBottom: 12,
             }}>
-              <div style={{ fontSize: 7, letterSpacing: 3, color: "#333", marginBottom: 8 }}>
+              <div style={{ fontSize: 7, letterSpacing: 3, color: "#333", marginBottom: 6 }}>
                 {activeCourse.title} · {activeLesson.duration}
               </div>
-              <div style={{ fontSize: 13, color: "#d0d0d0", fontWeight: 300, letterSpacing: 1, marginBottom: 16 }}>
+              <div style={{ fontSize: 14, color: "#d0d0d0", fontWeight: 300, letterSpacing: 1 }}>
                 {activeLesson.title}
-              </div>
-              <div style={{ fontSize: 10, color: "#555", lineHeight: 1.9, fontWeight: 300 }}>
-                <p style={{ marginBottom: 14 }}>
-                  This lesson content would be loaded from your Skool course database. In the production version, each lesson pulls the actual content from your courses, formatted with the operator aesthetic.
-                </p>
-                <p style={{ marginBottom: 14 }}>
-                  The AI teacher is available during each lesson to answer questions, provide examples, and test understanding in real-time. Every interaction is calibrated to the operative's psychological profile.
-                </p>
-                <p style={{ color: "#333" }}>
-                  [Full lesson content renders here — text, embedded videos, diagrams, frameworks, case studies]
-                </p>
               </div>
             </div>
 
+            {/* Lesson Content */}
+            {LESSON_CONTENT[activeLesson.id] ? (
+              <div>
+                {LESSON_CONTENT[activeLesson.id].sections.map((section, si) => (
+                  <div key={si} style={{
+                    border: "1px solid #0e0e0e", borderRadius: 8, padding: 18,
+                    background: "#070707", marginBottom: 8,
+                    animation: `slideIn 0.3s ease ${si * 0.08}s both`,
+                  }}>
+                    <div style={{
+                      fontSize: 8, letterSpacing: 3, color: "#dc2626",
+                      marginBottom: 10, fontWeight: 500,
+                    }}>
+                      {section.heading}
+                    </div>
+                    <div style={{
+                      fontSize: 10, color: "#888", lineHeight: 1.9, fontWeight: 300,
+                      whiteSpace: "pre-wrap", letterSpacing: 0.2,
+                    }}>
+                      {section.body}
+                    </div>
+                  </div>
+                ))}
+
+                {/* Skool Link */}
+                <div style={{
+                  border: "1px solid #0e0e0e", borderRadius: 8, padding: 14,
+                  background: "#070707", marginBottom: 12, textAlign: "center",
+                }}>
+                  <div style={{ fontSize: 8, letterSpacing: 3, color: "#333", marginBottom: 6 }}>FULL INTELLIGENCE FILE</div>
+                  <div style={{ fontSize: 9, color: "#555", fontWeight: 300 }}>
+                    Access the complete lesson with videos, diagrams, and case studies on Skool
+                  </div>
+                  <div style={{
+                    marginTop: 8, fontSize: 9, color: "#dc2626", letterSpacing: 2,
+                    opacity: 0.6, fontWeight: 400,
+                  }}>
+                    → ACCESS ON SKOOL
+                  </div>
+                </div>
+
+                {/* In-Lesson AI Teacher */}
+                <SectionDivider text="AI TEACHER" />
+                <div style={{
+                  border: "1px solid #0e0e0e", borderRadius: 8,
+                  background: "#050505", overflow: "hidden",
+                }}>
+                  <div style={{
+                    padding: "10px 14px", borderBottom: "1px solid #0a0a0a",
+                    fontSize: 8, letterSpacing: 3, color: "#dc2626",
+                  }}>
+                    ◈ ASK ABOUT THIS LESSON
+                  </div>
+
+                  <div style={{
+                    maxHeight: 250, overflowY: "auto", padding: 12,
+                  }}>
+                    {lessonChat.length === 0 && (
+                      <div style={{ textAlign: "center", padding: "16px 0" }}>
+                        <div style={{ fontSize: 9, color: "#222", fontWeight: 300 }}>
+                          Ask any question about this lesson. The AI teacher has the full content loaded.
+                        </div>
+                      </div>
+                    )}
+                    {lessonChat.map((msg, i) => (
+                      <div key={i} style={{ marginBottom: 10 }}>
+                        <div style={{ fontSize: 7, letterSpacing: 2, color: msg.role === "user" ? "#333" : "#dc2626", marginBottom: 3 }}>
+                          {msg.role === "user" ? "YOU" : "◈ SYSTEM"}
+                        </div>
+                        <div style={{
+                          fontSize: 9, lineHeight: 1.7, color: msg.role === "user" ? "#666" : "#888",
+                          padding: "8px 10px", background: msg.role === "user" ? "#080808" : "#060606",
+                          border: "1px solid #0e0e0e", borderRadius: 4,
+                          whiteSpace: "pre-wrap", fontWeight: 300,
+                        }}>
+                          {msg.content}
+                        </div>
+                      </div>
+                    ))}
+                    {lessonTyping && (
+                      <div style={{ fontSize: 9, color: "#333", padding: "8px 10px", animation: "pulse 1.5s infinite" }}>
+                        ▌ Processing...
+                      </div>
+                    )}
+                    <div ref={lessonChatRef} />
+                  </div>
+
+                  <div style={{ display: "flex", gap: 4, padding: 8, borderTop: "1px solid #0a0a0a" }}>
+                    <input
+                      value={lessonChatInput}
+                      onChange={(e) => setLessonChatInput(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendLessonMessage()}
+                      placeholder="Ask about this lesson..."
+                      style={{
+                        flex: 1, padding: "8px 10px", background: "#080808",
+                        border: "1px solid #0e0e0e", borderRadius: 4,
+                        color: "#ccc", fontSize: 9, fontFamily: "inherit", fontWeight: 300,
+                      }}
+                    />
+                    <button onClick={sendLessonMessage} style={{
+                      padding: "8px 14px", background: "#dc2626", border: "none",
+                      borderRadius: 4, color: "#000", cursor: "pointer",
+                      fontFamily: "inherit", fontSize: 8, letterSpacing: 2, fontWeight: 600,
+                    }}>
+                      ASK
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* Fallback for lessons without content yet */
+              <div style={{
+                border: "1px solid #0e0e0e", borderRadius: 8, padding: 24,
+                background: "#070707", marginBottom: 16, textAlign: "center",
+              }}>
+                <div style={{ fontSize: 9, color: "#333", marginBottom: 8, letterSpacing: 2 }}>CONTENT INCOMING</div>
+                <div style={{ fontSize: 10, color: "#444", lineHeight: 1.7, fontWeight: 300 }}>
+                  This lesson is being loaded into the intelligence system. Access the full version on Skool.
+                </div>
+                <div style={{
+                  marginTop: 12, fontSize: 9, color: "#dc2626", letterSpacing: 2,
+                  opacity: 0.6, fontWeight: 400,
+                }}>
+                  → ACCESS ON SKOOL
+                </div>
+              </div>
+            )}
+
+            {/* Complete Button */}
             <button onClick={() => {
               setUser(prev => ({ ...prev, completedLessons: [...prev.completedLessons, activeLesson.id] }));
               addXP(30);
               setActiveLesson(null);
+              setLessonChat([]);
             }} style={{
-              width: "100%", padding: 14, background: "#16a34a11",
-              border: "1px solid #16a34a22", borderRadius: 6,
-              color: "#16a34a", cursor: "pointer", fontFamily: "inherit",
-              fontSize: 9, letterSpacing: 3, fontWeight: 400,
+              width: "100%", padding: 14, marginTop: 12,
+              background: "#16a34a11", border: "1px solid #16a34a22",
+              borderRadius: 6, color: "#16a34a", cursor: "pointer",
+              fontFamily: "inherit", fontSize: 9, letterSpacing: 3, fontWeight: 400,
             }}>
               MARK AS COMPLETE · +30 XP
             </button>
