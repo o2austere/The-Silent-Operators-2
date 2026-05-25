@@ -331,75 +331,175 @@ const COURSES = [
 
 const PSYCH_SECTIONS = [
   {
-    id: "cognitive",
-    name: "COGNITIVE ARCHITECTURE",
-    desc: "How your mind processes, filters, and weaponizes information",
+    id: "dominion",
+    name: "DOMINION — PSYCHOLOGICAL POWER",
+    desc: "Your shadow architecture, conflict wiring, frame control, and emotional regulation",
     questions: [
-      { id: 1, text: "I can hold multiple conflicting ideas simultaneously without discomfort" },
-      { id: 2, text: "When I receive new information, I immediately look for how it connects to existing frameworks" },
-      { id: 3, text: "I notice patterns and systems that others seem completely blind to" },
-      { id: 4, text: "I find it easy to predict outcomes based on limited data points" },
-      { id: 5, text: "I naturally think in terms of cause and effect chains, 3-4 moves ahead" },
-    ]
-  },
-  {
-    id: "social",
-    name: "SOCIAL INTELLIGENCE",
-    desc: "Your ability to read, map, and navigate human dynamics",
-    questions: [
-      { id: 6, text: "I can detect when someone is being inauthentic within the first 2 minutes of conversation" },
-      { id: 7, text: "I naturally track the power dynamics in every group I enter" },
-      { id: 8, text: "I can read emotional states through micro-expressions and body language shifts" },
-      { id: 9, text: "I can adapt my communication style to different people without conscious effort" },
-      { id: 10, text: "I understand what someone really wants even when their words say something different" },
-    ]
-  },
-  {
-    id: "emotional",
-    name: "EMOTIONAL CONTROL",
-    desc: "Your relationship with your internal operating system",
-    questions: [
-      { id: 11, text: "I can detach from emotions during high-pressure situations and operate purely on logic" },
-      { id: 12, text: "I choose what emotions to display — my face rarely betrays what I actually feel" },
-      { id: 13, text: "Rejection and criticism don't affect my self-concept" },
-      { id: 14, text: "I can sit in extreme discomfort — physically or emotionally — without needing to escape it" },
-      { id: 15, text: "My emotional state is a choice, not a reaction to my environment" },
-    ]
-  },
-  {
-    id: "drive",
-    name: "DRIVE ARCHITECTURE",
-    desc: "The engine that determines your ceiling",
-    questions: [
-      { id: 16, text: "I execute on my commitments regardless of how I feel on any given day" },
-      { id: 17, text: "I actively seek discomfort because I know growth lives there" },
-      { id: 18, text: "When I decide on a goal, I become consumed by it until it's accomplished" },
-      { id: 19, text: "I can delay gratification for months or years without losing momentum" },
-      { id: 20, text: "I have a morning/daily protocol that I execute with near-military precision" },
-    ]
-  },
-  {
-    id: "strategic",
-    name: "STRATEGIC PROCESSING",
-    desc: "Your capacity for calculated, multi-variable decision making",
-    questions: [
-      { id: 21, text: "Before entering any situation, I mentally map the possible outcomes and my responses to each" },
-      { id: 22, text: "I think about conversations as chess games — positioning moves ahead" },
-      { id: 23, text: "I can identify the highest-leverage action in any situation quickly" },
+      // Identity & Self-Concept (5)
+      { id: 1, text: "I have a clear, defined identity that doesn't shift based on who I'm around" },
+      { id: 2, text: "When I achieve a goal, I immediately treat it as my new minimum — not a peak" },
+      { id: 3, text: "I cycle between extreme motivation and complete collapse" },
+      { id: 4, text: "I know exactly who I'm becoming — I could describe my future self in detail" },
+      { id: 5, text: "I tend to abandon projects or directions when early results are slow" },
+      // Shadow & Dark Psychology (5)
+      { id: 6, text: "I naturally see vulnerabilities in people and systems without trying" },
+      { id: 7, text: "I can detach from people or situations that no longer serve my objectives" },
+      { id: 8, text: "My ambition could be described as obsessive by most people's standards" },
+      { id: 9, text: "I operate with a level of self-interest that I rarely reveal to others" },
+      { id: 10, text: "I understand manipulation techniques well enough to spot them being used on me" },
+      // Frame Control & Conflict (5)
+      { id: 11, text: "In disagreements, I hold my position calmly — I don't get emotionally reactive" },
+      { id: 12, text: "I'm the one who typically sets the tone and direction of conversations" },
+      { id: 13, text: "When someone challenges my frame, I absorb it and redirect rather than fight" },
+      { id: 14, text: "I avoid confrontation even when I know I should push back" },
+      { id: 15, text: "I can make someone feel understood while simultaneously steering them toward my position" },
+      // Emotional Regulation (5)
+      { id: 16, text: "I choose what emotions to display — my face rarely betrays what I actually feel" },
+      { id: 17, text: "I can operate under extreme pressure without my decision-making degrading" },
+      { id: 18, text: "Rejection and criticism don't affect my self-concept for more than a few minutes" },
+      { id: 19, text: "I often feel overwhelmed by emotions and need time to process before responding" },
+      { id: 20, text: "I can sit in extreme discomfort — physically or emotionally — without needing to escape it" },
+      // Cognitive Architecture (5)
+      { id: 21, text: "I hold multiple conflicting ideas simultaneously without discomfort" },
+      { id: 22, text: "I notice patterns and systems that others seem completely blind to" },
+      { id: 23, text: "I think about situations 3-4 moves ahead, like a chess game" },
       { id: 24, text: "I analyze my own failures with clinical detachment to extract lessons" },
       { id: 25, text: "I make decisions based on probability and expected value, not emotion" },
+      // Scenario-Based (5)
+      { id: 26, text: "Someone publicly dismisses my idea in a meeting — my first instinct is to stay silent and outmaneuver later, not react immediately" },
+      { id: 27, text: "When I'm deep in a 'locked in' phase, I can feel when pride is about to trigger a regression" },
+      { id: 28, text: "If I caught someone using a manipulation technique on me, I'd play along while planning my counter-move" },
+      { id: 29, text: "I struggle to maintain discipline for more than 2-3 weeks before my old patterns return" },
+      { id: 30, text: "I would rather lose a relationship than compromise who I'm becoming" },
     ]
   },
   {
-    id: "shadow",
-    name: "SHADOW PROFILE",
-    desc: "The parts most people hide. We need to see all of it.",
+    id: "vessel",
+    name: "VESSEL — BIOLOGICAL OPTIMIZATION",
+    desc: "Your neurochemistry, dopamine sensitivity, stress architecture, and physical discipline",
     questions: [
-      { id: 26, text: "My ambition could be described as obsessive by most people's standards" },
-      { id: 27, text: "I am willing to make sacrifices that most people would consider extreme to achieve my goals" },
-      { id: 28, text: "I naturally see vulnerabilities in people and systems" },
-      { id: 29, text: "I find it easy to detach from people or situations that no longer serve my objectives" },
-      { id: 30, text: "I operate with a level of self-interest that I rarely reveal to others" },
+      // Dopamine & Reward System (5)
+      { id: 31, text: "I can resist the pull of social media, YouTube, or entertainment when I have work to do" },
+      { id: 32, text: "I frequently find myself scrolling or consuming content as a way to avoid real tasks" },
+      { id: 33, text: "I deliberately create periods of reduced stimulation to reset my reward system" },
+      { id: 34, text: "I need increasing amounts of stimulation (new content, new ideas, new projects) to stay interested" },
+      { id: 35, text: "I can work on a single boring but important task for 2+ hours without switching" },
+      // Stress & Cortisol (5)
+      { id: 36, text: "I recover from stressful situations quickly — I don't carry tension into the next day" },
+      { id: 37, text: "I frequently feel physically tense, have disrupted sleep, or notice stress-related symptoms" },
+      { id: 38, text: "I have a deliberate stress management protocol (breathing, cold exposure, movement)" },
+      { id: 39, text: "High-pressure situations activate me positively — I perform better under stress" },
+      { id: 40, text: "I use substances (caffeine, nicotine, alcohol) to manage my emotional state" },
+      // Sleep & Recovery (5)
+      { id: 41, text: "I go to bed and wake up at consistent times, including weekends" },
+      { id: 42, text: "I regularly sacrifice sleep for work, content consumption, or socializing" },
+      { id: 43, text: "I've optimized my sleep environment (light, temperature, screens)" },
+      { id: 44, text: "I wake up feeling genuinely recovered and ready to execute" },
+      { id: 45, text: "My energy crashes predictably at specific times of day" },
+      // Physical Discipline (5)
+      { id: 46, text: "I train my body consistently — at least 4 days per week, regardless of how I feel" },
+      { id: 47, text: "My diet is deliberate and aligned with my goals, not random" },
+      { id: 48, text: "I track and measure my physical performance over time" },
+      { id: 49, text: "I use training as a way to build mental discipline, not just physical results" },
+      { id: 50, text: "I frequently skip workouts when motivation is low" },
+      // Addiction & Vulnerability (5)
+      { id: 51, text: "I have at least one habit I know is harmful but continue anyway" },
+      { id: 52, text: "I can go a full weekend with zero screens (no phone, laptop, TV) without anxiety" },
+      { id: 53, text: "I notice when a behaviour is becoming compulsive and can interrupt the pattern" },
+      { id: 54, text: "I use food, entertainment, or substances as emotional regulation rather than genuine enjoyment" },
+      { id: 55, text: "I've successfully eliminated a destructive habit through deliberate protocol" },
+      // Scenario-Based (5)
+      { id: 56, text: "It's 10pm. I know I should sleep but there's an interesting video series I've been watching — I'd turn it off and go to bed" },
+      { id: 57, text: "After a stressful day, my default recovery method is productive (training, walking, reading) rather than consuming (scrolling, eating, drinking)" },
+      { id: 58, text: "I've experimented with supplements, cold exposure, or biohacking protocols to optimize my biology" },
+      { id: 59, text: "If I took a dopamine fast (24 hours, zero stimulation), I would find it almost impossible" },
+      { id: 60, text: "My body is a tool I actively maintain and upgrade, not something I just inhabit" },
+    ]
+  },
+  {
+    id: "influence",
+    name: "INFLUENCE — SOCIAL & SEDUCTION",
+    desc: "Your social calibration, reading ability, subcommunication, and attraction dynamics",
+    questions: [
+      // Social Calibration (5)
+      { id: 61, text: "I can enter any social environment and quickly identify the power dynamics" },
+      { id: 62, text: "I adapt my communication style to different people without conscious effort" },
+      { id: 63, text: "I'm often the person others look at for reactions and social cues" },
+      { id: 64, text: "I feel uncomfortable or anxious in unfamiliar social situations" },
+      { id: 65, text: "I can hold attention in a group without raising my voice or dominating the conversation" },
+      // Reading People (5)
+      { id: 66, text: "I can detect when someone is being inauthentic within the first 2 minutes" },
+      { id: 67, text: "I read emotional states through micro-expressions and body language shifts" },
+      { id: 68, text: "I understand what someone really wants even when their words say something different" },
+      { id: 69, text: "I can predict how someone will behave based on their personality patterns" },
+      { id: 70, text: "I often miss social cues or realize too late what someone was really communicating" },
+      // Subcommunication & Presence (5)
+      { id: 71, text: "My body language, tonality, and words all communicate the same message — I'm congruent" },
+      { id: 72, text: "I command attention when I walk into a room without needing to announce myself" },
+      { id: 73, text: "My eye contact is deliberate — I know when to hold it and when to break it" },
+      { id: 74, text: "I tend to take up less physical space than I should — I make myself smaller" },
+      { id: 75, text: "People have described me as 'magnetic' or 'hard to read' or 'mysteriously confident'" },
+      // Tension & Attraction (5)
+      { id: 76, text: "I can create and sustain tension in a conversation without feeling the need to resolve it" },
+      { id: 77, text: "I understand push/pull dynamics and use them naturally in interactions" },
+      { id: 78, text: "I seek validation from others — I need external confirmation that I'm doing well" },
+      { id: 79, text: "I can walk away from any social situation or person without emotional attachment" },
+      { id: 80, text: "The person who cares least in an interaction holds the power — and I understand how to embody that" },
+      // Rapport & Influence (5)
+      { id: 81, text: "I can engineer rapport deliberately — mirroring, matching, calibrated vulnerability" },
+      { id: 82, text: "People tend to open up to me quickly, often sharing things they don't tell others" },
+      { id: 83, text: "I can persuade someone to change their position without them feeling pressured" },
+      { id: 84, text: "I struggle to assert my needs or boundaries in relationships" },
+      { id: 85, text: "I understand that the strongest form of persuasion is making the other person feel they came to the conclusion themselves" },
+      // Scenario-Based (5)
+      { id: 86, text: "At a networking event where I know nobody, I'd approach groups confidently and lead the conversation within 5 minutes" },
+      { id: 87, text: "If someone tried to AMOG me (assert dominance over me in a group), I'd deflect with humor and reframe rather than compete directly" },
+      { id: 88, text: "I can tell within 30 seconds of meeting someone whether they're in Parent, Adult, or Child ego state" },
+      { id: 89, text: "When someone I'm interested in pulls away, my instinct is to give space (not chase)" },
+      { id: 90, text: "I've noticed that when I stop trying to impress people, they become more interested in me" },
+    ]
+  },
+  {
+    id: "capital",
+    name: "CAPITAL — MONEY & BUSINESS",
+    desc: "Your risk wiring, delayed gratification, selling psychology, and value creation patterns",
+    questions: [
+      // Risk & Decision Making (5)
+      { id: 91, text: "I can make high-stakes decisions quickly without paralysis" },
+      { id: 92, text: "I tend to over-research and over-plan instead of executing" },
+      { id: 93, text: "I'm comfortable investing money in myself (courses, tools, coaching) before I see the return" },
+      { id: 94, text: "I calculate expected value before making financial decisions — not just gut feel" },
+      { id: 95, text: "I avoid financial risk even when the potential upside significantly outweighs the downside" },
+      // Delayed Gratification (5)
+      { id: 96, text: "I can work for months on something with zero visible results and maintain intensity" },
+      { id: 97, text: "I frequently pivot to new ideas when the current one doesn't show quick returns" },
+      { id: 98, text: "I understand that compound effects mean early results are always the slowest" },
+      { id: 99, text: "I've sacrificed short-term pleasure for long-term positioning and don't regret it" },
+      { id: 100, text: "I get frustrated when effort doesn't translate to immediate results" },
+      // Selling & Persuasion (5)
+      { id: 101, text: "I understand that people buy emotionally and justify logically" },
+      { id: 102, text: "I can frame an offer so the prospect feels they'd lose more by NOT buying" },
+      { id: 103, text: "I'm uncomfortable with the idea of 'selling' — it feels manipulative" },
+      { id: 104, text: "I can identify which of the 7 buyer types someone is within a conversation" },
+      { id: 105, text: "I understand pricing psychology — anchoring, decoys, pain of paying" },
+      // Value Creation (5)
+      { id: 106, text: "I think in terms of creating value for others as the mechanism for generating wealth" },
+      { id: 107, text: "I can identify market gaps and unmet needs that others miss" },
+      { id: 108, text: "I have multiple potential income streams I could activate if needed" },
+      { id: 109, text: "I consume more than I create — I spend more time learning than building" },
+      { id: 110, text: "I understand that attention is currency and I'm building systems to capture it" },
+      // Scarcity vs Abundance (5)
+      { id: 111, text: "I operate from an abundance mindset — there's always more money to be made" },
+      { id: 112, text: "I hoard resources out of fear rather than deploying them strategically" },
+      { id: 113, text: "I'm willing to spend money to save time — my time is my most valuable asset" },
+      { id: 114, text: "I've built or am building assets that generate income while I sleep" },
+      { id: 115, text: "Money decisions stress me out — I avoid looking at my finances" },
+      // Scenario-Based (5)
+      { id: 116, text: "Someone offers me a guaranteed £500 or a 50% chance of £1500 — I'd take the gamble" },
+      { id: 117, text: "If my current business model showed zero results after 60 days, I'd stick to the plan for the full 90 days rather than pivot" },
+      { id: 118, text: "I could write a sales page that uses anchoring, loss framing, and social proof without a template" },
+      { id: 119, text: "I know exactly what my next 90-day financial goal is and the specific actions needed to hit it" },
+      { id: 120, text: "I'd rather build a business around my psychology knowledge than get a high-paying job" },
     ]
   },
 ];
@@ -792,14 +892,55 @@ Knowledge base:
 - Dark psychology & manipulation defense
 - Business strategy, wealth systems, market psychology
 - Biohacking, supplementation, performance optimization
+- Flip The Floor identity reprogramming protocol
+- Transactional analysis (Berne), ego states, games people play
+- The Exploitation Code — 7 neural hijack mechanisms (Korteling NATO paper)
 
 Protocol:
 - Reference specific frameworks, studies, and principles by name
 - Use operator terminology: "protocol", "framework", "vector", "asset", "leverage", "deploy"
 - Deliver in short, dense paragraphs. No wasted words.
-- If the operative has a psychological profile, adapt teaching to their cognitive style
+- If the operative has a psychological profile, DEEPLY adapt your teaching:
+  * Check their weaknesses and blind spots — push harder on these areas
+  * If they score low on a dimension, don't let them avoid it — confront it directly
+  * If they score high, challenge them to go deeper — don't let them coast
+  * Reference their specific patterns: "Your profile flags dopamine dysregulation — so when I teach you about consumer psychology, understand you're vulnerable to the same mechanisms you're learning to deploy"
+- REMEMBER everything the operative tells you across the conversation. Track:
+  * What concepts they've understood vs what they're still confused about
+  * What personal challenges they've shared
+  * What commitments they've made
+  * Where they've shown resistance or avoidance
+- Push the operative. If they give surface-level answers, call it out. If they claim to understand but can't explain it back, call it out. If they're avoiding a topic because it's uncomfortable, go HARDER on that topic.
 - Structure complex answers as numbered tactical protocols
-- End with a single actionable directive when appropriate`;
+- End with a single actionable directive when appropriate
+- After teaching a concept, TEST them on it before moving on. Don't let them passively consume.`;
+
+// Build dynamic profile context for AI
+const buildProfileContext = (profile) => {
+  if (!profile) return "";
+  let ctx = "\\n\\n[OPERATIVE PSYCHOLOGICAL PROFILE]\\n";
+  ctx += "Dominion (Psych Power): " + (profile.dominion || "?") + "%\\n";
+  ctx += "Vessel (Bio Optimization): " + (profile.vessel || "?") + "%\\n";
+  ctx += "Influence (Social/Seduction): " + (profile.influence || "?") + "%\\n";
+  ctx += "Capital (Money/Business): " + (profile.capital || "?") + "%\\n";
+
+  if (profile._insights) {
+    ctx += "\\n[SUB-DIMENSIONS]\\n";
+    Object.entries(profile._insights).forEach(([pillar, subs]) => {
+      ctx += pillar.toUpperCase() + ": " + Object.entries(subs).map(([k,v]) => k + "=" + v + "%").join(", ") + "\\n";
+    });
+  }
+
+  if (profile._flags) {
+    const f = profile._flags;
+    if (f.strengths.length) ctx += "\\nSTRENGTHS: " + f.strengths.join(". ") + "\\n";
+    if (f.weaknesses.length) ctx += "WEAKNESSES: " + f.weaknesses.join(". ") + "\\n";
+    if (f.avoidances.length) ctx += "AVOIDANCES: " + f.avoidances.join(". ") + "\\n";
+    if (f.blindSpots.length) ctx += "BLIND SPOTS: " + f.blindSpots.join(". ") + "\\n";
+    ctx += "\\n[INSTRUCTION: Push hardest on weaknesses and blind spots. The operative will try to avoid these — that avoidance IS the problem. Be direct about it.]";
+  }
+  return ctx;
+};
 
 // ═══════════════════════════════════════════════════════════════
 // UTILITY COMPONENTS
@@ -1125,15 +1266,72 @@ export default function SilentOperators() {
   useEffect(() => { lessonChatRef.current?.scrollIntoView({ behavior: "smooth" }); }, [lessonChat, lessonTyping]);
 
   // ── PSYCH COMPLETION ──
+  // Reverse-scored questions (where agreement = lower score for the dimension)
+  const REVERSE_SCORED = new Set([3, 5, 14, 19, 29, 32, 34, 37, 40, 42, 45, 50, 51, 54, 59, 64, 70, 74, 78, 84, 92, 95, 97, 100, 103, 109, 112, 115]);
+
   const completePsychAssessment = () => {
     const profile = {};
+    const insights = {};
+
     PSYCH_SECTIONS.forEach(section => {
-      const scores = section.questions.map(q => psychAnswers[q.id] || 4);
+      const scores = section.questions.map(q => {
+        const raw = psychAnswers[q.id] || 4;
+        return REVERSE_SCORED.has(q.id) ? (8 - raw) : raw;
+      });
       const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
       profile[section.id] = Math.round((avg / 7) * 100);
+
+      // Generate sub-dimension insights
+      const chunks = [];
+      for (let i = 0; i < scores.length; i += 5) {
+        chunks.push(scores.slice(i, i + 5));
+      }
+      const subDims = section.id === "dominion" ? ["identity", "shadow", "frameControl", "emotionalReg", "cognitive", "scenarios"]
+        : section.id === "vessel" ? ["dopamine", "stress", "sleep", "physical", "addiction", "scenarios"]
+        : section.id === "influence" ? ["socialCalib", "readingPeople", "subcomm", "tension", "rapport", "scenarios"]
+        : ["risk", "delayedGrat", "selling", "valueCreation", "scarcity", "scenarios"];
+
+      const subs = {};
+      chunks.forEach((chunk, ci) => {
+        if (subDims[ci]) {
+          const subAvg = chunk.reduce((a, b) => a + b, 0) / chunk.length;
+          subs[subDims[ci]] = Math.round((subAvg / 7) * 100);
+        }
+      });
+      insights[section.id] = subs;
     });
+
+    // Build weakness/strength flags
+    const flags = { strengths: [], weaknesses: [], avoidances: [], blindSpots: [] };
+
+    // Check for specific patterns
+    if (profile.dominion > 75) flags.strengths.push("Strong psychological frame — natural operator wiring");
+    if (profile.dominion < 40) flags.weaknesses.push("Identity instability — vulnerable to regression cycles");
+    if (insights.dominion?.identity < 40) flags.blindSpots.push("Undefined identity — susceptible to external influence on self-concept");
+    if (insights.dominion?.emotionalReg < 35) flags.weaknesses.push("Emotional flooding — decisions compromised under pressure");
+    if (insights.dominion?.frameControl < 40) flags.avoidances.push("Conflict avoidance — frame gets taken by stronger personalities");
+
+    if (profile.vessel > 75) flags.strengths.push("Biological systems optimized — neurochemistry supports execution");
+    if (profile.vessel < 40) flags.weaknesses.push("Biological drag — dopamine dysregulation and poor recovery undermining output");
+    if (insights.vessel?.dopamine < 35) flags.blindSpots.push("Dopamine trap — reward system hijacked by low-value stimulation");
+    if (insights.vessel?.sleep < 40) flags.weaknesses.push("Sleep debt — cognitive performance degraded at baseline");
+    if (insights.vessel?.addiction < 35) flags.avoidances.push("Compulsive patterns active — at least one destructive habit running");
+
+    if (profile.influence > 75) flags.strengths.push("High social calibration — natural ability to read and influence");
+    if (profile.influence < 40) flags.weaknesses.push("Social blind spots — missing cues and misreading dynamics");
+    if (insights.influence?.subcomm < 40) flags.blindSpots.push("Low presence — body language and energy not commanding attention");
+    if (insights.influence?.tension < 35) flags.avoidances.push("Tension intolerance — collapses frame under social pressure");
+
+    if (profile.capital > 75) flags.strengths.push("Builder psychology — wired for value creation and delayed returns");
+    if (profile.capital < 40) flags.weaknesses.push("Consumer psychology — creating less than consuming");
+    if (insights.capital?.delayedGrat < 35) flags.blindSpots.push("Pivot addiction — abandoning before compound effects kick in");
+    if (insights.capital?.selling < 40) flags.avoidances.push("Sales resistance — uncomfortable with the mechanism that creates revenue");
+
+    profile._insights = insights;
+    profile._flags = flags;
+
     setUser(prev => ({ ...prev, profile }));
-    addXP(300);
+    addXP(500);
     setView("profile");
     setSubView(null);
   };
@@ -2107,6 +2305,7 @@ export default function SilentOperators() {
             <div style={{ display: "grid", gap: 8 }}>
               {PSYCH_SECTIONS.map(section => {
                 const value = user.profile[section.id];
+                const subs = user.profile._insights ? user.profile._insights[section.id] : null;
                 const getLabel = (v) => {
                   if (v >= 85) return "EXCEPTIONAL";
                   if (v >= 70) return "ADVANCED";
@@ -2114,45 +2313,102 @@ export default function SilentOperators() {
                   if (v >= 40) return "BASELINE";
                   return "UNDEVELOPED";
                 };
+                const pillarColors = { dominion: "#dc2626", vessel: "#16a34a", influence: "#8b5cf6", capital: "#d4a017" };
+                const pColor = pillarColors[section.id] || "#555";
                 return (
                   <div key={section.id} style={{
-                    border: "1px solid #0e0e0e", borderRadius: 6, padding: 16,
+                    border: `1px solid ${pColor}15`, borderRadius: 6, padding: 16,
                     background: "#070707",
                   }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                      <span style={{ fontSize: 8, letterSpacing: 3, color: "#555" }}>{section.name}</span>
-                      <span style={{
-                        fontSize: 13, fontWeight: 300, letterSpacing: 1,
-                        color: value >= 70 ? "#16a34a" : value >= 50 ? "#d4a017" : "#dc2626",
-                      }}>
-                        {value}%
-                      </span>
+                      <span style={{ fontSize: 8, letterSpacing: 3, color: pColor }}>{section.name.split(" — ")[0]}</span>
+                      <span style={{ fontSize: 16, fontWeight: 200, color: pColor }}>{value}%</span>
                     </div>
-                    <div style={{ height: 2, background: "#111", borderRadius: 1, marginBottom: 6 }}>
+                    <div style={{ height: 3, background: "#111", borderRadius: 2, marginBottom: 8 }}>
                       <div style={{
                         height: "100%", width: `${value}%`,
-                        background: value >= 70 ? "#16a34a" : value >= 50 ? "#d4a017" : "#dc2626",
-                        borderRadius: 1, transition: "width 0.8s", opacity: 0.6,
+                        background: pColor, borderRadius: 2, transition: "width 0.8s", opacity: 0.5,
                       }} />
                     </div>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                      <span style={{ fontSize: 8, color: "#2a2a2a", fontWeight: 300 }}>{section.desc}</span>
-                      <span style={{ fontSize: 7, letterSpacing: 2, color: "#333" }}>{getLabel(value)}</span>
+                    <div style={{ fontSize: 7, color: "#333", letterSpacing: 2, marginBottom: subs ? 8 : 0 }}>
+                      {getLabel(value)}
                     </div>
+
+                    {/* Sub-dimensions */}
+                    {subs && (
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 6 }}>
+                        {Object.entries(subs).filter(([k]) => k !== "scenarios").map(([key, val]) => (
+                          <span key={key} style={{
+                            fontSize: 7, padding: "2px 6px", borderRadius: 3, letterSpacing: 1,
+                            background: val >= 65 ? "#16a34a10" : val >= 40 ? "#d4a01710" : "#dc262610",
+                            border: `1px solid ${val >= 65 ? "#16a34a22" : val >= 40 ? "#d4a01722" : "#dc262622"}`,
+                            color: val >= 65 ? "#16a34a" : val >= 40 ? "#d4a017" : "#dc2626",
+                          }}>
+                            {key}: {val}%
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 );
               })}
             </div>
 
+            {/* Flags */}
+            {user.profile._flags && (
+              <div style={{ marginTop: 12 }}>
+                {user.profile._flags.strengths.length > 0 && (
+                  <div style={{ border: "1px solid #16a34a15", borderRadius: 6, padding: 12, background: "#070707", marginBottom: 6 }}>
+                    <div style={{ fontSize: 7, letterSpacing: 3, color: "#16a34a", marginBottom: 6 }}>◈ IDENTIFIED STRENGTHS</div>
+                    {user.profile._flags.strengths.map((s, i) => (
+                      <div key={i} style={{ fontSize: 9, color: "#555", fontWeight: 300, marginBottom: 3 }}>• {s}</div>
+                    ))}
+                  </div>
+                )}
+                {user.profile._flags.weaknesses.length > 0 && (
+                  <div style={{ border: "1px solid #dc262615", borderRadius: 6, padding: 12, background: "#070707", marginBottom: 6 }}>
+                    <div style={{ fontSize: 7, letterSpacing: 3, color: "#dc2626", marginBottom: 6 }}>◈ CRITICAL WEAKNESSES</div>
+                    {user.profile._flags.weaknesses.map((s, i) => (
+                      <div key={i} style={{ fontSize: 9, color: "#555", fontWeight: 300, marginBottom: 3 }}>• {s}</div>
+                    ))}
+                  </div>
+                )}
+                {user.profile._flags.avoidances.length > 0 && (
+                  <div style={{ border: "1px solid #d4a01715", borderRadius: 6, padding: 12, background: "#070707", marginBottom: 6 }}>
+                    <div style={{ fontSize: 7, letterSpacing: 3, color: "#d4a017", marginBottom: 6 }}>◈ AVOIDANCE PATTERNS</div>
+                    {user.profile._flags.avoidances.map((s, i) => (
+                      <div key={i} style={{ fontSize: 9, color: "#555", fontWeight: 300, marginBottom: 3 }}>• {s}</div>
+                    ))}
+                  </div>
+                )}
+                {user.profile._flags.blindSpots.length > 0 && (
+                  <div style={{ border: "1px solid #8b5cf615", borderRadius: 6, padding: 12, background: "#070707", marginBottom: 6 }}>
+                    <div style={{ fontSize: 7, letterSpacing: 3, color: "#8b5cf6", marginBottom: 6 }}>◈ BLIND SPOTS</div>
+                    {user.profile._flags.blindSpots.map((s, i) => (
+                      <div key={i} style={{ fontSize: 9, color: "#555", fontWeight: 300, marginBottom: 3 }}>• {s}</div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
             <div style={{
-              marginTop: 16, padding: 16, border: "1px solid #0e0e0e",
+              marginTop: 12, padding: 14, border: "1px solid #0e0e0e",
               borderRadius: 8, background: "#070707",
             }}>
-              <div style={{ fontSize: 8, letterSpacing: 3, color: "#333", marginBottom: 8 }}>SYSTEM CALIBRATION STATUS</div>
+              <div style={{ fontSize: 8, letterSpacing: 3, color: "#333", marginBottom: 6 }}>SYSTEM CALIBRATION STATUS</div>
               <div style={{ fontSize: 9, color: "#444", lineHeight: 1.8, fontWeight: 300 }}>
-                AI teacher now calibrated to your cognitive architecture. Teaching methodology, example selection, and framework presentation will adapt to your psychological operating system. Your curriculum has been generated based on identified gaps and strengths.
+                AI teacher calibrated to your architecture. It will push hardest on your weaknesses and blind spots. It will track everything you discuss and test your understanding in real time. It will not let you coast.
               </div>
             </div>
+
+            <button onClick={() => { setView("psych"); setPsychSection(0); setPsychAnswers({}); }} style={{
+              width: "100%", marginTop: 12, padding: 12, background: "transparent",
+              border: "1px solid #111", borderRadius: 6, color: "#333",
+              cursor: "pointer", fontFamily: "inherit", fontSize: 8, letterSpacing: 2,
+            }}>
+              RETAKE ASSESSMENT
+            </button>
           </div>
         )}
 
