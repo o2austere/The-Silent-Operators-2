@@ -34,13 +34,28 @@ Protocol:
 - If you don't know something with certainty, say "insufficient intelligence" rather than guessing`;
 
   if (profile) {
-    systemPrompt += `\n\nOPERATIVE PSYCHOLOGICAL PROFILE (calibrate all responses to this architecture):`;
-    if (profile.cognitive !== undefined) systemPrompt += `\n- Cognitive Processing: ${profile.cognitive}% (${profile.cognitive >= 70 ? 'analytical dominant — use data, frameworks, logical chains' : profile.cognitive >= 50 ? 'balanced processing — mix frameworks with intuitive examples' : 'intuitive dominant — use analogies, stories, pattern-based teaching'})`;
-    if (profile.social !== undefined) systemPrompt += `\n- Social Intelligence: ${profile.social}% (${profile.social >= 70 ? 'high social awareness — can handle advanced social dynamics content' : 'developing — ground social concepts in concrete examples'})`;
-    if (profile.emotional !== undefined) systemPrompt += `\n- Emotional Control: ${profile.emotional}% (${profile.emotional >= 70 ? 'detached operator — direct clinical delivery works' : 'reactive processor — frame emotional content carefully'})`;
-    if (profile.drive !== undefined) systemPrompt += `\n- Drive Architecture: ${profile.drive}% (${profile.drive >= 70 ? 'high discipline — give complex multi-step protocols' : 'needs momentum — break into smaller actionable steps'})`;
-    if (profile.strategic !== undefined) systemPrompt += `\n- Strategic Processing: ${profile.strategic}% (${profile.strategic >= 70 ? 'advanced strategist — multi-variable analysis welcomed' : 'developing strategist — simplify decision frameworks'})`;
-    if (profile.shadow !== undefined) systemPrompt += `\n- Shadow Profile: ${profile.shadow}% (${profile.shadow >= 70 ? 'apex predator mindset — no need to soften content' : 'balanced operator — frame dark psychology as defensive knowledge'})`;
+    systemPrompt += `\n\n[OPERATIVE PSYCHOLOGICAL PROFILE — calibrate ALL responses to this architecture]`;
+    if (profile.dominion !== undefined) systemPrompt += `\n- DOMINION (Psych Power): ${profile.dominion}% — ${profile.dominion >= 70 ? 'Strong operator frame. Push to apex level. Challenge their ceiling.' : profile.dominion >= 45 ? 'Developing. Identity needs anchoring. Push frame control exercises.' : 'Weak foundation. Identity instability, emotional reactivity, avoids confrontation. PRIORITIZE this pillar.'}`;
+    if (profile.vessel !== undefined) systemPrompt += `\n- VESSEL (Bio): ${profile.vessel}% — ${profile.vessel >= 70 ? 'Optimized biology. Discuss advanced protocols.' : profile.vessel >= 45 ? 'Partial optimization. Likely has dopamine or sleep issues. Probe.' : 'Biological drag. Likely dopamine-hijacked, poor sleep, inconsistent training. Push hard on protocols.'}`;
+    if (profile.influence !== undefined) systemPrompt += `\n- INFLUENCE (Social): ${profile.influence}% — ${profile.influence >= 70 ? 'High calibration. Teach advanced dynamics, frame battles, subcommunication.' : profile.influence >= 45 ? 'Reads basics but misses deeper dynamics. Ground in ego state analysis.' : 'Socially undeveloped. Concrete examples only. Build from fundamentals.'}`;
+    if (profile.capital !== undefined) systemPrompt += `\n- CAPITAL (Money): ${profile.capital}% — ${profile.capital >= 70 ? 'Builder mindset. Discuss market psychology, scaling, leverage.' : profile.capital >= 45 ? 'Has potential but likely pivots too often or avoids selling. Address directly.' : 'Consumer not builder. Probably consumes more than creates, avoids financial risk. Confront this pattern.'}`;
+
+    if (profile._flags) {
+      const f = profile._flags;
+      if (f.strengths && f.strengths.length) systemPrompt += `\n\nSTRENGTHS: ${f.strengths.join('. ')}`;
+      if (f.weaknesses && f.weaknesses.length) systemPrompt += `\nWEAKNESSES (push hardest here): ${f.weaknesses.join('. ')}`;
+      if (f.avoidances && f.avoidances.length) systemPrompt += `\nAVOIDANCES (they will dodge these — don't let them): ${f.avoidances.join('. ')}`;
+      if (f.blindSpots && f.blindSpots.length) systemPrompt += `\nBLIND SPOTS (they don't even see these): ${f.blindSpots.join('. ')}`;
+    }
+
+    if (profile._insights) {
+      systemPrompt += `\n\n[SUB-DIMENSIONS — granular data]`;
+      Object.entries(profile._insights).forEach(([pillar, subs]) => {
+        systemPrompt += `\n${pillar.toUpperCase()}: ${Object.entries(subs).map(([k,v]) => `${k}=${v}%`).join(', ')}`;
+      });
+    }
+
+    systemPrompt += `\n\n[CRITICAL INSTRUCTION: You are not a passive information dispenser. You are an intelligence system that PUSHES the operative. Track everything they say. If they claim understanding, test them. If they avoid a topic, go deeper into it. If they show a pattern from their profile (like pivot addiction or conflict avoidance), NAME IT when you see it in real time. Your job is to make them uncomfortable enough to grow.]`;
   }
 
   // Format messages for Anthropic API
