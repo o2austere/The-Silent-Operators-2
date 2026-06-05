@@ -15,10 +15,10 @@ const RANKS = [
 ];
 
 const PILLARS = [
-  { id: "money", name: "CAPITAL", icon: "⦿", color: "#16a34a", desc: "Wealth systems, business architecture, financial psychology, market manipulation", symbol: "₿" },
-  { id: "seduction", name: "INFLUENCE", icon: "◎", color: "#db2777", desc: "Social engineering, frame control, desire mechanics, interpersonal warfare", symbol: "♛" },
-  { id: "health", name: "VESSEL", icon: "◉", color: "#0891b2", desc: "Biological optimization, neurochemistry, performance protocols, longevity", symbol: "⧫" },
-  { id: "power", name: "DOMINION", icon: "◆", color: "#dc2626", desc: "Dark psychology, strategic warfare, information control, Machiavellian systems", symbol: "♜" },
+  { id: "psychology", name: "PSYCHOLOGY", icon: "◆", color: "#dc2626", desc: "Dark psychology, persuasion, frame control, Machiavellian systems", symbol: "♜" },
+  { id: "money", name: "MONEY", icon: "⦿", color: "#d4a017", desc: "Wealth systems, business architecture, selling, market psychology", symbol: "₿" },
+  { id: "health", name: "HEALTH", icon: "◉", color: "#16a34a", desc: "Biological optimization, neurochemistry, dopamine, performance", symbol: "⧫" },
+  { id: "seduction", name: "SEDUCTION", icon: "◎", color: "#8b5cf6", desc: "Social dynamics, attraction, subcommunication, interpersonal warfare", symbol: "♛" },
 ];
 
 // ═══════════════════════════════════════════════════════════════
@@ -1673,10 +1673,17 @@ Requirements:
             <SectionDivider text="THE FOUR PILLARS" />
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
               {PILLARS.map(pillar => {
-                const score = user.pillarScores[pillar.id];
+                const score = user.profile ? user.profile[pillar.id] : undefined;
                 return (
                   <button key={pillar.id} onClick={() => {
-                    if (score === undefined) { setPillarAssessing(pillar.id); setPillarAnswers({}); }
+                    if (user.profile) {
+                      setView("train");
+                      setExpandedPillar(pillar.id);
+                    } else {
+                      setView("psych");
+                      setPsychSection(0);
+                      setPsychAnswers({});
+                    }
                   }} style={{
                     padding: 16, background: "#070707",
                     border: `1px solid ${score !== undefined ? pillar.color + "15" : "#0e0e0e"}`,
@@ -1691,7 +1698,7 @@ Requirements:
                     {score !== undefined ? (
                       <div>
                         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 8, marginBottom: 4 }}>
-                          <span style={{ color: "#333", letterSpacing: 2 }}>MAPPED</span>
+                          <span style={{ color: "#333", letterSpacing: 2 }}>→ ENTER TRAINING</span>
                           <span style={{ color: pillar.color, fontWeight: 500 }}>{score}%</span>
                         </div>
                         <div style={{ height: 2, background: "#111", borderRadius: 1 }}>
@@ -1700,7 +1707,7 @@ Requirements:
                       </div>
                     ) : (
                       <div style={{ fontSize: 8, color: pillar.color, letterSpacing: 3, opacity: 0.5 }}>
-                        → MAP SKILL LEVEL
+                        → COMPLETE PROFILING
                       </div>
                     )}
                   </button>
