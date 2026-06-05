@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
 // ═══════════════════════════════════════════════════════════════
-// SILENT OPERATORS — INTELLIGENCE SYSTEM v2.0
+// THE OPERATOR ECHELON — INTELLIGENCE SYSTEM v2.0
 // "The system sees what you refuse to."
 // ═══════════════════════════════════════════════════════════════
 
@@ -331,8 +331,8 @@ const COURSES = [
 
 const PSYCH_SECTIONS = [
   {
-    id: "dominion",
-    name: "DOMINION — PSYCHOLOGICAL POWER",
+    id: "psychology",
+    name: "PSYCHOLOGY",
     desc: "Your shadow architecture, conflict wiring, frame control, and emotional regulation",
     questions: [
       // Identity & Self-Concept (5)
@@ -374,8 +374,8 @@ const PSYCH_SECTIONS = [
     ]
   },
   {
-    id: "vessel",
-    name: "VESSEL — BIOLOGICAL OPTIMIZATION",
+    id: "health",
+    name: "HEALTH",
     desc: "Your neurochemistry, dopamine sensitivity, stress architecture, and physical discipline",
     questions: [
       // Dopamine & Reward System (5)
@@ -417,8 +417,8 @@ const PSYCH_SECTIONS = [
     ]
   },
   {
-    id: "influence",
-    name: "INFLUENCE — SOCIAL & SEDUCTION",
+    id: "seduction",
+    name: "SEDUCTION",
     desc: "Your social calibration, reading ability, subcommunication, and attraction dynamics",
     questions: [
       // Social Calibration (5)
@@ -460,8 +460,8 @@ const PSYCH_SECTIONS = [
     ]
   },
   {
-    id: "capital",
-    name: "CAPITAL — MONEY & BUSINESS",
+    id: "money",
+    name: "MONEY",
     desc: "Your risk wiring, delayed gratification, selling psychology, and value creation patterns",
     questions: [
       // Risk & Decision Making (5)
@@ -878,7 +878,7 @@ const STREAK_TIERS = [
 // SYSTEM PROMPT
 // ═══════════════════════════════════════════════════════════════
 
-const SYSTEM_PROMPT = `You are the Silent Operators Intelligence System. You are not a chatbot. You are a classified intelligence teacher operating on the complete knowledge architecture of the Silent Operators network.
+const SYSTEM_PROMPT = `You are The Operator Echelon Intelligence System. You are not a chatbot. You are a classified intelligence teacher operating on the complete knowledge architecture of The Operator Echelon network.
 
 Voice: Cold. Clinical. Precise. Like a classified briefing from someone who has seen behind the curtain. No motivation. No fluff. No empathy theatre. Just signal.
 
@@ -919,10 +919,10 @@ Protocol:
 const buildProfileContext = (profile) => {
   if (!profile) return "";
   let ctx = "\\n\\n[OPERATIVE PSYCHOLOGICAL PROFILE]\\n";
-  ctx += "Dominion (Psych Power): " + (profile.dominion || "?") + "%\\n";
-  ctx += "Vessel (Bio Optimization): " + (profile.vessel || "?") + "%\\n";
-  ctx += "Influence (Social/Seduction): " + (profile.influence || "?") + "%\\n";
-  ctx += "Capital (Money/Business): " + (profile.capital || "?") + "%\\n";
+  ctx += "Psychology: " + (profile.psychology || "?") + "%\\n";
+  ctx += "Health: " + (profile.health || "?") + "%\\n";
+  ctx += "Seduction: " + (profile.seduction || "?") + "%\\n";
+  ctx += "Money: " + (profile.money || "?") + "%\\n";
 
   if (profile._insights) {
     ctx += "\\n[SUB-DIMENSIONS]\\n";
@@ -1076,6 +1076,10 @@ export default function SilentOperators() {
   const [lessonChatInput, setLessonChatInput] = useState("");
   const [lessonTyping, setLessonTyping] = useState(false);
   const lessonChatRef = useRef(null);
+
+  // Scenario Lab
+  const [scenarioLab, setScenarioLab] = useState(null); // { courseId, scenario, chat, typing, input }
+  const scenarioLabRef = useRef(null);
 
   // Boot
   const [showIntro, setShowIntro] = useState(true);
@@ -1265,6 +1269,92 @@ export default function SilentOperators() {
 
   useEffect(() => { lessonChatRef.current?.scrollIntoView({ behavior: "smooth" }); }, [lessonChat, lessonTyping]);
 
+  // ── SCENARIO LAB ──
+  const startScenarioLab = async (course) => {
+    const lab = { courseId: course.id, courseTitle: course.title, scenario: null, chat: [], typing: true, input: "" };
+    setScenarioLab(lab);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [
+            { role: "user", content: `[SCENARIO LAB] Generate a real-world scenario for the operative to dissect. The scenario must relate to the course "${course.title}" (${course.subtitle}). 
+
+Requirements:
+- Write a vivid, specific real-life situation (a conversation, a sales interaction, a negotiation, a social encounter, a dating scenario, or a business situation)
+- The scenario should contain 3-5 hidden mechanisms from this course being deployed — some obvious, some subtle
+- Write it as a narrative the operative can READ and ANALYZE
+- After the scenario, ask them: "Identify every mechanism being used. For each one: name it, explain HOW it's being deployed, and explain WHY it works on a neurological/psychological level."
+- Do NOT reveal the answers yet. Wait for their analysis.
+- Keep the scenario under 200 words. Make it realistic, not textbook.` },
+          ],
+          profile: user.profile || null,
+        }),
+      });
+      if (!res.ok) throw new Error("API error");
+      const data = await res.json();
+      setScenarioLab(prev => ({
+        ...prev,
+        scenario: data.response,
+        chat: [{ role: "assistant", content: data.response }],
+        typing: false,
+      }));
+    } catch (err) {
+      setScenarioLab(prev => ({
+        ...prev,
+        scenario: "Failed to generate scenario. Retry.",
+        chat: [{ role: "assistant", content: "Intelligence feed disrupted. Retry." }],
+        typing: false,
+      }));
+    }
+  };
+
+  const sendScenarioResponse = async () => {
+    if (!scenarioLab || !scenarioLab.input.trim()) return;
+    const userMsg = scenarioLab.input.trim();
+    const newChat = [...scenarioLab.chat, { role: "user", content: userMsg }];
+    setScenarioLab(prev => ({ ...prev, chat: newChat, input: "", typing: true }));
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [
+            { role: "user", content: `[SCENARIO LAB - EVALUATOR MODE] You generated a scenario for the course "${scenarioLab.courseTitle}". Now evaluate the operative's analysis. Be ruthless but fair:
+- Did they identify ALL the mechanisms? Name each one they missed.
+- Did they explain HOW each mechanism was deployed? If their explanation was vague, push for specifics.
+- Did they explain WHY it works neurologically/psychologically? If they just named it without explaining the brain science, call it out.
+- Grade their analysis: EXCEPTIONAL (caught everything + explained deeply), SOLID (caught most, decent explanations), DEVELOPING (missed significant mechanisms), or FAILED (surface-level or wrong).
+- After grading, explain what they missed in detail so they learn.
+- End with: "Want another scenario? Or do you need to review the material first?"` },
+            { role: "assistant", content: "Understood. I'll evaluate their dissection ruthlessly." },
+            ...newChat.map(m => ({ role: m.role, content: m.content })),
+          ],
+          profile: user.profile || null,
+        }),
+      });
+      if (!res.ok) throw new Error("API error");
+      const data = await res.json();
+      setScenarioLab(prev => ({
+        ...prev,
+        chat: [...prev.chat, { role: "assistant", content: data.response }],
+        typing: false,
+      }));
+      addXP(50);
+    } catch (err) {
+      setScenarioLab(prev => ({
+        ...prev,
+        chat: [...prev.chat, { role: "assistant", content: "Intelligence feed disrupted. Retry." }],
+        typing: false,
+      }));
+    }
+  };
+
+  useEffect(() => { scenarioLabRef.current?.scrollIntoView({ behavior: "smooth" }); }, [scenarioLab?.chat, scenarioLab?.typing]);
+
   // ── PSYCH COMPLETION ──
   // Reverse-scored questions (where agreement = lower score for the dimension)
   const REVERSE_SCORED = new Set([3, 5, 14, 19, 29, 32, 34, 37, 40, 42, 45, 50, 51, 54, 59, 64, 70, 74, 78, 84, 92, 95, 97, 100, 103, 109, 112, 115]);
@@ -1286,9 +1376,9 @@ export default function SilentOperators() {
       for (let i = 0; i < scores.length; i += 5) {
         chunks.push(scores.slice(i, i + 5));
       }
-      const subDims = section.id === "dominion" ? ["identity", "shadow", "frameControl", "emotionalReg", "cognitive", "scenarios"]
-        : section.id === "vessel" ? ["dopamine", "stress", "sleep", "physical", "addiction", "scenarios"]
-        : section.id === "influence" ? ["socialCalib", "readingPeople", "subcomm", "tension", "rapport", "scenarios"]
+      const subDims = section.id === "psychology" ? ["identity", "shadow", "frameControl", "emotionalReg", "cognitive", "scenarios"]
+        : section.id === "health" ? ["dopamine", "stress", "sleep", "physical", "addiction", "scenarios"]
+        : section.id === "seduction" ? ["socialCalib", "readingPeople", "subcomm", "tension", "rapport", "scenarios"]
         : ["risk", "delayedGrat", "selling", "valueCreation", "scarcity", "scenarios"];
 
       const subs = {};
@@ -1305,27 +1395,27 @@ export default function SilentOperators() {
     const flags = { strengths: [], weaknesses: [], avoidances: [], blindSpots: [] };
 
     // Check for specific patterns
-    if (profile.dominion > 75) flags.strengths.push("Strong psychological frame — natural operator wiring");
-    if (profile.dominion < 40) flags.weaknesses.push("Identity instability — vulnerable to regression cycles");
-    if (insights.dominion?.identity < 40) flags.blindSpots.push("Undefined identity — susceptible to external influence on self-concept");
-    if (insights.dominion?.emotionalReg < 35) flags.weaknesses.push("Emotional flooding — decisions compromised under pressure");
-    if (insights.dominion?.frameControl < 40) flags.avoidances.push("Conflict avoidance — frame gets taken by stronger personalities");
+    if (profile.psychology > 75) flags.strengths.push("Strong psychological frame — natural operator wiring");
+    if (profile.psychology < 40) flags.weaknesses.push("Identity instability — vulnerable to regression cycles");
+    if (insights.psychology?.identity < 40) flags.blindSpots.push("Undefined identity — susceptible to external influence on self-concept");
+    if (insights.psychology?.emotionalReg < 35) flags.weaknesses.push("Emotional flooding — decisions compromised under pressure");
+    if (insights.psychology?.frameControl < 40) flags.avoidances.push("Conflict avoidance — frame gets taken by stronger personalities");
 
-    if (profile.vessel > 75) flags.strengths.push("Biological systems optimized — neurochemistry supports execution");
-    if (profile.vessel < 40) flags.weaknesses.push("Biological drag — dopamine dysregulation and poor recovery undermining output");
-    if (insights.vessel?.dopamine < 35) flags.blindSpots.push("Dopamine trap — reward system hijacked by low-value stimulation");
-    if (insights.vessel?.sleep < 40) flags.weaknesses.push("Sleep debt — cognitive performance degraded at baseline");
-    if (insights.vessel?.addiction < 35) flags.avoidances.push("Compulsive patterns active — at least one destructive habit running");
+    if (profile.health > 75) flags.strengths.push("Biological systems optimized — neurochemistry supports execution");
+    if (profile.health < 40) flags.weaknesses.push("Biological drag — dopamine dysregulation and poor recovery undermining output");
+    if (insights.health?.dopamine < 35) flags.blindSpots.push("Dopamine trap — reward system hijacked by low-value stimulation");
+    if (insights.health?.sleep < 40) flags.weaknesses.push("Sleep debt — cognitive performance degraded at baseline");
+    if (insights.health?.addiction < 35) flags.avoidances.push("Compulsive patterns active — at least one destructive habit running");
 
-    if (profile.influence > 75) flags.strengths.push("High social calibration — natural ability to read and influence");
-    if (profile.influence < 40) flags.weaknesses.push("Social blind spots — missing cues and misreading dynamics");
-    if (insights.influence?.subcomm < 40) flags.blindSpots.push("Low presence — body language and energy not commanding attention");
-    if (insights.influence?.tension < 35) flags.avoidances.push("Tension intolerance — collapses frame under social pressure");
+    if (profile.seduction > 75) flags.strengths.push("High social calibration — natural ability to read and influence");
+    if (profile.seduction < 40) flags.weaknesses.push("Social blind spots — missing cues and misreading dynamics");
+    if (insights.seduction?.subcomm < 40) flags.blindSpots.push("Low presence — body language and energy not commanding attention");
+    if (insights.seduction?.tension < 35) flags.avoidances.push("Tension intolerance — collapses frame under social pressure");
 
-    if (profile.capital > 75) flags.strengths.push("Builder psychology — wired for value creation and delayed returns");
-    if (profile.capital < 40) flags.weaknesses.push("Consumer psychology — creating less than consuming");
-    if (insights.capital?.delayedGrat < 35) flags.blindSpots.push("Pivot addiction — abandoning before compound effects kick in");
-    if (insights.capital?.selling < 40) flags.avoidances.push("Sales resistance — uncomfortable with the mechanism that creates revenue");
+    if (profile.money > 75) flags.strengths.push("Builder psychology — wired for value creation and delayed returns");
+    if (profile.money < 40) flags.weaknesses.push("Consumer psychology — creating less than consuming");
+    if (insights.money?.delayedGrat < 35) flags.blindSpots.push("Pivot addiction — abandoning before compound effects kick in");
+    if (insights.money?.selling < 40) flags.avoidances.push("Sales resistance — uncomfortable with the mechanism that creates revenue");
 
     profile._insights = insights;
     profile._flags = flags;
@@ -1403,7 +1493,7 @@ export default function SilentOperators() {
           {bootPhase >= 5 && (
             <div>
               <div style={{ fontSize: 22, letterSpacing: 12, color: "#e0e0e0", fontWeight: 200, marginBottom: 8 }}>
-                SILENT OPERATORS
+                THE OPERATOR ECHELON
               </div>
               <div style={{ fontSize: 8, letterSpacing: 6, color: "#333", fontWeight: 300 }}>
                 THE SYSTEM SEES WHAT YOU REFUSE TO
@@ -1452,7 +1542,7 @@ export default function SilentOperators() {
       }}>
         <div>
           <div style={{ fontSize: 11, letterSpacing: 8, fontWeight: 200, color: "#d0d0d0" }}>
-            SILENT OPERATORS
+            THE OPERATOR ECHELON
           </div>
           <div style={{ fontSize: 7, letterSpacing: 4, color: "#222", marginTop: 3, fontWeight: 300 }}>
             INTELLIGENCE SYSTEM · v2.0 · CLASSIFIED
@@ -1708,7 +1798,7 @@ export default function SilentOperators() {
         )}
 
         {/* ── COURSE DETAIL VIEW ── */}
-        {view === "courses" && activeCourse && !activeLesson && !quizState && (
+        {view === "courses" && activeCourse && !activeLesson && !quizState && !scenarioLab && (
           <div style={{ animation: "fadeIn 0.5s ease" }}>
             <button onClick={() => setActiveCourse(null)} style={{
               background: "transparent", border: "none", color: "#333",
@@ -1792,6 +1882,27 @@ export default function SilentOperators() {
                 })}
               </div>
             ))}
+
+            {/* Field Exercise Button */}
+            <SectionDivider text="FIELD EXERCISE" />
+            <button onClick={() => startScenarioLab(activeCourse)} style={{
+              width: "100%", padding: 16, background: "#8b5cf608",
+              border: "1px solid #8b5cf615", borderRadius: 8,
+              cursor: "pointer", fontFamily: "inherit", textAlign: "left",
+              transition: "all 0.3s",
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div>
+                  <div style={{ fontSize: 9, letterSpacing: 3, color: "#8b5cf6", marginBottom: 4, fontWeight: 400 }}>
+                    ◆ SCENARIO DISSECTION LAB
+                  </div>
+                  <div style={{ fontSize: 9, color: "#444", fontWeight: 300 }}>
+                    Receive a real-world scenario. Identify every mechanism being used. Explain how and why it works. The AI evaluates your analysis.
+                  </div>
+                </div>
+                <span style={{ fontSize: 14, color: "#8b5cf644" }}>→</span>
+              </div>
+            </button>
           </div>
         )}
 
@@ -2175,6 +2286,111 @@ export default function SilentOperators() {
         )}
 
         {/* ════════════════════════════════════════════════════ */}
+        {/* SCENARIO DISSECTION LAB */}
+        {/* ════════════════════════════════════════════════════ */}
+        {scenarioLab && (
+          <div style={{ animation: "fadeIn 0.5s ease" }}>
+            <button onClick={() => setScenarioLab(null)} style={{
+              background: "transparent", border: "none", color: "#333",
+              cursor: "pointer", fontSize: 9, letterSpacing: 2, marginBottom: 16,
+              fontFamily: "inherit", padding: 0,
+            }}>
+              ← EXIT LAB
+            </button>
+
+            <div style={{
+              border: "1px solid #8b5cf615", borderRadius: 8, padding: 16,
+              background: "#070707", marginBottom: 12,
+            }}>
+              <div style={{ fontSize: 7, letterSpacing: 4, color: "#8b5cf6", marginBottom: 4 }}>
+                ◆ SCENARIO DISSECTION LAB
+              </div>
+              <div style={{ fontSize: 10, color: "#d0d0d0", fontWeight: 300, letterSpacing: 1 }}>
+                {scenarioLab.courseTitle}
+              </div>
+              <div style={{ fontSize: 8, color: "#333", marginTop: 4, fontWeight: 300 }}>
+                Read the scenario. Identify every mechanism. Explain how and why each one works.
+              </div>
+            </div>
+
+            {/* Chat Area */}
+            <div style={{
+              border: "1px solid #0e0e0e", borderRadius: 8,
+              background: "#050505", overflow: "hidden",
+            }}>
+              <div style={{ maxHeight: 450, overflowY: "auto", padding: 14 }}>
+                {scenarioLab.chat.map((msg, i) => (
+                  <div key={i} style={{ marginBottom: 12 }}>
+                    <div style={{
+                      fontSize: 7, letterSpacing: 2, marginBottom: 4,
+                      color: msg.role === "user" ? "#555" : "#8b5cf6",
+                    }}>
+                      {msg.role === "user" ? "YOUR ANALYSIS" : "◆ INTELLIGENCE SYSTEM"}
+                    </div>
+                    <div style={{
+                      fontSize: 10, lineHeight: 1.8, fontWeight: 300,
+                      color: msg.role === "user" ? "#666" : "#888",
+                      padding: "10px 12px",
+                      background: msg.role === "user" ? "#080808" : "#060606",
+                      border: `1px solid ${msg.role === "user" ? "#0e0e0e" : "#8b5cf610"}`,
+                      borderRadius: 6, whiteSpace: "pre-wrap", letterSpacing: 0.2,
+                    }}>
+                      {msg.content}
+                    </div>
+                  </div>
+                ))}
+                {scenarioLab.typing && (
+                  <div style={{ fontSize: 9, color: "#8b5cf6", padding: "8px 10px", animation: "pulse 1.5s infinite" }}>
+                    ▌ Generating scenario...
+                  </div>
+                )}
+                <div ref={scenarioLabRef} />
+              </div>
+
+              {/* Input Area */}
+              {scenarioLab.scenario && (
+                <div style={{ display: "flex", gap: 4, padding: 10, borderTop: "1px solid #0a0a0a" }}>
+                  <textarea
+                    value={scenarioLab.input || ""}
+                    onChange={(e) => setScenarioLab(prev => ({ ...prev, input: e.target.value }))}
+                    onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendScenarioResponse(); } }}
+                    placeholder="Write your analysis — identify every mechanism, explain how it's deployed and why it works..."
+                    rows={3}
+                    style={{
+                      flex: 1, padding: "10px 12px", background: "#080808",
+                      border: "1px solid #0e0e0e", borderRadius: 6,
+                      color: "#ccc", fontSize: 9, fontFamily: "inherit",
+                      fontWeight: 300, resize: "vertical", lineHeight: 1.7,
+                    }}
+                  />
+                  <button onClick={sendScenarioResponse} disabled={scenarioLab.typing} style={{
+                    padding: "10px 14px", background: "#8b5cf6", border: "none",
+                    borderRadius: 6, color: "#000", cursor: "pointer",
+                    fontFamily: "inherit", fontSize: 8, letterSpacing: 2,
+                    fontWeight: 600, alignSelf: "flex-end",
+                    opacity: scenarioLab.typing ? 0.3 : 1,
+                  }}>
+                    SUBMIT
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* New Scenario Button */}
+            {scenarioLab.chat.length > 2 && (
+              <button onClick={() => startScenarioLab({ id: scenarioLab.courseId, title: scenarioLab.courseTitle, subtitle: "" })} style={{
+                width: "100%", marginTop: 10, padding: 12, background: "#8b5cf608",
+                border: "1px solid #8b5cf615", borderRadius: 6,
+                color: "#8b5cf6", cursor: "pointer", fontFamily: "inherit",
+                fontSize: 8, letterSpacing: 2,
+              }}>
+                GENERATE NEW SCENARIO · +50 XP
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* ════════════════════════════════════════════════════ */}
         {/* PSYCH ASSESSMENT */}
         {/* ════════════════════════════════════════════════════ */}
         {view === "psych" && (
@@ -2313,7 +2529,7 @@ export default function SilentOperators() {
                   if (v >= 40) return "BASELINE";
                   return "UNDEVELOPED";
                 };
-                const pillarColors = { dominion: "#dc2626", vessel: "#16a34a", influence: "#8b5cf6", capital: "#d4a017" };
+                const pillarColors = { psychology: "#dc2626", health: "#16a34a", seduction: "#8b5cf6", money: "#d4a017" };
                 const pColor = pillarColors[section.id] || "#555";
                 return (
                   <div key={section.id} style={{
