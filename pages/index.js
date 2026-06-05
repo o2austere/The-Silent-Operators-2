@@ -29,7 +29,7 @@ const COURSES = [
   // ── DOMINION (POWER) PILLAR ──
   {
     id: "mindhijacking",
-    pillar: "power",
+    pillar: "psychology",
     title: "MINDHIJACKING",
     subtitle: "The 7 neural mechanisms that control every human decision",
     difficulty: "ADVANCED",
@@ -77,7 +77,7 @@ const COURSES = [
   },
   {
     id: "persuasion-code",
-    pillar: "power",
+    pillar: "psychology",
     title: "THE PERSUASION CODE",
     subtitle: "Primal brain dominance — the 6 stimuli that bypass rational thought",
     difficulty: "ADVANCED",
@@ -117,7 +117,7 @@ const COURSES = [
   },
   {
     id: "dark-psychology",
-    pillar: "power",
+    pillar: "psychology",
     title: "DARK PSYCHOLOGY",
     subtitle: "The shadow architecture of human manipulation and defense",
     difficulty: "CLASSIFIED",
@@ -286,7 +286,7 @@ const COURSES = [
   // ── CROSS-PILLAR: MINDSET ──
   {
     id: "flip-the-floor",
-    pillar: "power",
+    pillar: "psychology",
     title: "FLIP THE FLOOR",
     subtitle: "Identity reprogramming — raise your baseline until regression is impossible",
     difficulty: "FOUNDATIONAL",
@@ -1039,6 +1039,7 @@ function DifficultyBadge({ level }) {
 export default function SilentOperators() {
   const [view, setView] = useState("hub");
   const [subView, setSubView] = useState(null);
+  const [expandedPillar, setExpandedPillar] = useState(null);
   const [user, setUser] = useState({
     name: "OPERATIVE",
     xp: 250,
@@ -1422,7 +1423,7 @@ Requirements:
 
     setUser(prev => ({ ...prev, profile }));
     addXP(500);
-    setView("profile");
+    setView("train");
     setSubView(null);
   };
 
@@ -1716,89 +1717,238 @@ Requirements:
         {/* ════════════════════════════════════════════════════ */}
         {/* COURSES VIEW */}
         {/* ════════════════════════════════════════════════════ */}
-        {view === "courses" && !activeCourse && (
+        {/* ── INTEGRATED PILLAR VIEW (Profile + Courses) ── */}
+        {view === "train" && !activeCourse && !quizState && !scenarioLab && (
           <div style={{ animation: "fadeIn 0.5s ease" }}>
-            <div style={{ fontSize: 7, letterSpacing: 4, color: "#222", marginBottom: 4 }}>KNOWLEDGE ARCHITECTURE</div>
-            <div style={{ fontSize: 13, color: "#d0d0d0", fontWeight: 300, letterSpacing: 2, marginBottom: 6 }}>
-              COURSE LIBRARY
-            </div>
-            <div style={{ fontSize: 9, color: "#2a2a2a", marginBottom: 20, fontWeight: 300 }}>
-              Each course is an intelligence module. Complete assessments to prove internalization.
-            </div>
+            {!user.profile ? (
+              /* No profile — start assessment */
+              <div style={{ textAlign: "center", padding: "60px 0" }}>
+                <div style={{ fontSize: 36, color: "#1a1a1a", marginBottom: 16 }}>△</div>
+                <div style={{ fontSize: 11, color: "#333", letterSpacing: 2, marginBottom: 8 }}>NO PROFILE DETECTED</div>
+                <div style={{ fontSize: 9, color: "#222", marginBottom: 20, fontWeight: 300 }}>
+                  Complete the psychological assessment to map your architecture and unlock personalized training.
+                </div>
+                <button onClick={() => { setView("psych"); setPsychSection(0); setPsychAnswers({}); }} style={{
+                  padding: "12px 24px", background: "#dc262611", border: "1px solid #dc262622",
+                  borderRadius: 6, color: "#dc2626", cursor: "pointer",
+                  fontFamily: "inherit", fontSize: 9, letterSpacing: 2,
+                }}>
+                  BEGIN PROFILING
+                </button>
+              </div>
+            ) : (
+              /* Profile exists — show 4 pillars with embedded courses */
+              <div>
+                <div style={{ textAlign: "center", marginBottom: 20 }}>
+                  <div style={{ fontSize: 7, letterSpacing: 4, color: "#dc2626", marginBottom: 4 }}>OPERATOR TRAINING</div>
+                  <div style={{ fontSize: 13, color: "#d0d0d0", fontWeight: 200, letterSpacing: 3 }}>
+                    YOUR FOUR PILLARS
+                  </div>
+                </div>
 
-            {PILLARS.map(pillar => {
-              const pillarCourses = COURSES.filter(c => c.pillar === pillar.id);
-              if (!pillarCourses.length) return null;
-              return (
-                <div key={pillar.id}>
-                  <SectionDivider text={`${pillar.symbol} ${pillar.name}`} />
-                  {pillarCourses.map(course => {
-                    const isLocked = course.locked && user.level < (course.requiredRank || 0);
-                    const totalLessons = course.modules.reduce((a, m) => a + m.lessons.length, 0);
-                    const completedInCourse = course.modules.reduce((a, m) =>
-                      a + m.lessons.filter(l => user.completedLessons.includes(l.id)).length, 0);
-                    const progress = totalLessons > 0 ? Math.round((completedInCourse / totalLessons) * 100) : 0;
+                {PSYCH_SECTIONS.map(section => {
+                  const value = user.profile[section.id];
+                  const subs = user.profile._insights ? user.profile._insights[section.id] : null;
+                  const pillarCourses = COURSES.filter(c => c.pillar === section.id);
+                  const isExpanded = expandedPillar === section.id;
+                  const pillarColors = { psychology: "#dc2626", health: "#16a34a", seduction: "#8b5cf6", money: "#d4a017" };
+                  const pColor = pillarColors[section.id] || "#555";
+                  const pillarIcons = { psychology: "◈", health: "◉", seduction: "◐", money: "◧" };
 
-                    return (
-                      <button key={course.id} onClick={() => !isLocked && setActiveCourse(course)} style={{
-                        width: "100%", textAlign: "left", padding: 16, marginBottom: 8,
-                        background: isLocked ? "#050505" : "linear-gradient(135deg, #080808, #070707)",
-                        border: `1px solid ${isLocked ? "#0a0a0a" : "#0e0e0e"}`,
-                        borderRadius: 8, cursor: isLocked ? "not-allowed" : "pointer",
-                        opacity: isLocked ? 0.35 : 1, fontFamily: "inherit",
-                        transition: "all 0.3s",
+                  return (
+                    <div key={section.id} style={{ marginBottom: 8 }}>
+                      {/* Pillar Header — clickable */}
+                      <button onClick={() => setExpandedPillar(isExpanded ? null : section.id)} style={{
+                        width: "100%", textAlign: "left",
+                        border: `1px solid ${isExpanded ? pColor + "22" : "#0e0e0e"}`,
+                        borderRadius: isExpanded ? "8px 8px 0 0" : 8,
+                        padding: "14px 16px", background: isExpanded ? `${pColor}05` : "#070707",
+                        cursor: "pointer", fontFamily: "inherit", transition: "all 0.3s",
                       }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
-                          <div>
-                            <div style={{ fontSize: 11, letterSpacing: 2, color: "#ccc", fontWeight: 400, marginBottom: 3 }}>
-                              {course.title}
-                            </div>
-                            <div style={{ fontSize: 9, color: "#2a2a2a", fontWeight: 300 }}>
-                              {course.subtitle}
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            <span style={{ fontSize: 16, color: pColor, opacity: 0.5 }}>{pillarIcons[section.id]}</span>
+                            <div>
+                              <div style={{ fontSize: 10, letterSpacing: 3, color: pColor, fontWeight: 400 }}>
+                                {section.name}
+                              </div>
+                              <div style={{ fontSize: 8, color: "#2a2a2a", marginTop: 2, fontWeight: 300 }}>
+                                {section.desc}
+                              </div>
                             </div>
                           </div>
-                          <DifficultyBadge level={course.difficulty} />
+                          <div style={{ textAlign: "right" }}>
+                            <div style={{ fontSize: 18, fontWeight: 200, color: pColor }}>{value}%</div>
+                            <div style={{ fontSize: 7, color: "#333", letterSpacing: 1 }}>
+                              {pillarCourses.length} course{pillarCourses.length !== 1 ? "s" : ""}
+                            </div>
+                          </div>
                         </div>
 
-                        <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 10 }}>
-                          <div style={{ flex: 1 }}>
-                            <div style={{ height: 2, background: "#111", borderRadius: 1 }}>
-                              <div style={{
-                                height: "100%", width: `${progress}%`,
-                                background: PILLARS.find(p => p.id === course.pillar)?.color || "#555",
-                                borderRadius: 1, transition: "width 0.5s", opacity: 0.7,
-                              }} />
+                        {/* Progress bar */}
+                        <div style={{ height: 2, background: "#111", borderRadius: 1, marginTop: 10 }}>
+                          <div style={{
+                            height: "100%", width: `${value}%`,
+                            background: pColor, borderRadius: 1, opacity: 0.4, transition: "width 0.8s",
+                          }} />
+                        </div>
+                      </button>
+
+                      {/* Expanded Content */}
+                      {isExpanded && (
+                        <div style={{
+                          border: `1px solid ${pColor}22`, borderTop: "none",
+                          borderRadius: "0 0 8px 8px", padding: 14,
+                          background: "#060606", animation: "fadeIn 0.3s ease",
+                        }}>
+                          {/* Sub-dimensions */}
+                          {subs && (
+                            <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 12 }}>
+                              {Object.entries(subs).filter(([k]) => k !== "scenarios").map(([key, val]) => (
+                                <span key={key} style={{
+                                  fontSize: 7, padding: "2px 6px", borderRadius: 3, letterSpacing: 1,
+                                  background: val >= 65 ? "#16a34a10" : val >= 40 ? "#d4a01710" : "#dc262610",
+                                  border: `1px solid ${val >= 65 ? "#16a34a22" : val >= 40 ? "#d4a01722" : "#dc262622"}`,
+                                  color: val >= 65 ? "#16a34a" : val >= 40 ? "#d4a017" : "#dc2626",
+                                }}>
+                                  {key}: {val}%
+                                </span>
+                              ))}
                             </div>
-                          </div>
-                          <span style={{ fontSize: 8, color: "#333", letterSpacing: 1 }}>
-                            {completedInCourse}/{totalLessons}
-                          </span>
-                          {isLocked && (
-                            <span style={{ fontSize: 8, color: "#dc2626", letterSpacing: 2 }}>
-                              🔒 RANK {course.requiredRank}
-                            </span>
+                          )}
+
+                          {/* Flags for this pillar */}
+                          {user.profile._flags && (() => {
+                            const allFlags = [
+                              ...user.profile._flags.weaknesses.filter(f => f.toLowerCase().includes(section.id === "psychology" ? "identity|frame|emotional|flooding|instability".split("|").find(k => f.toLowerCase().includes(k)) || "zzz" : section.id === "health" ? "dopamine|sleep|biological|compulsive".split("|").find(k => f.toLowerCase().includes(k)) || "zzz" : section.id === "seduction" ? "social|presence|tension".split("|").find(k => f.toLowerCase().includes(k)) || "zzz" : "pivot|consumer|sales|selling".split("|").find(k => f.toLowerCase().includes(k)) || "zzz")),
+                            ];
+                            return allFlags.length > 0 ? (
+                              <div style={{ marginBottom: 12, padding: "8px 10px", background: "#dc262608", border: "1px solid #dc262615", borderRadius: 4 }}>
+                                <div style={{ fontSize: 7, color: "#dc2626", letterSpacing: 2, marginBottom: 4 }}>⚠ FLAGGED</div>
+                                {allFlags.map((f, i) => (
+                                  <div key={i} style={{ fontSize: 8, color: "#555", fontWeight: 300 }}>• {f}</div>
+                                ))}
+                              </div>
+                            ) : null;
+                          })()}
+
+                          {/* Courses in this pillar */}
+                          <div style={{ fontSize: 7, letterSpacing: 3, color: "#333", marginBottom: 8 }}>COURSES</div>
+                          {pillarCourses.map(course => {
+                            const isLocked = course.locked && user.level < (course.requiredRank || 0);
+                            const totalLessons = course.modules.reduce((a, m) => a + m.lessons.length, 0);
+                            const completedInCourse = course.modules.reduce((a, m) =>
+                              a + m.lessons.filter(l => user.completedLessons.includes(l.id)).length, 0);
+                            const progress = totalLessons > 0 ? Math.round((completedInCourse / totalLessons) * 100) : 0;
+
+                            return (
+                              <button key={course.id} onClick={() => !isLocked && setActiveCourse(course)} style={{
+                                width: "100%", textAlign: "left", padding: 12, marginBottom: 6,
+                                background: isLocked ? "#050505" : "#080808",
+                                border: `1px solid ${isLocked ? "#0a0a0a" : "#0e0e0e"}`,
+                                borderRadius: 6, cursor: isLocked ? "not-allowed" : "pointer",
+                                opacity: isLocked ? 0.35 : 1, fontFamily: "inherit", transition: "all 0.2s",
+                              }}>
+                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                  <div>
+                                    <div style={{ fontSize: 10, letterSpacing: 2, color: "#ccc", fontWeight: 400, marginBottom: 2 }}>
+                                      {course.title}
+                                    </div>
+                                    <div style={{ fontSize: 8, color: "#222", fontWeight: 300 }}>
+                                      {course.subtitle}
+                                    </div>
+                                  </div>
+                                  <span style={{ fontSize: 10, color: "#1a1a1a" }}>→</span>
+                                </div>
+                                <div style={{ height: 2, background: "#111", borderRadius: 1, marginTop: 8 }}>
+                                  <div style={{
+                                    height: "100%", width: `${progress}%`,
+                                    background: pColor, borderRadius: 1, opacity: 0.5, transition: "width 0.5s",
+                                  }} />
+                                </div>
+                                <div style={{ fontSize: 7, color: "#222", marginTop: 4, letterSpacing: 1 }}>
+                                  {completedInCourse}/{totalLessons} complete · {course.modules.length} modules
+                                  {isLocked && <span style={{ color: "#dc2626", marginLeft: 8 }}>🔒 RANK {course.requiredRank}</span>}
+                                </div>
+                              </button>
+                            );
+                          })}
+
+                          {pillarCourses.length === 0 && (
+                            <div style={{ fontSize: 9, color: "#222", fontWeight: 300, padding: 10, textAlign: "center" }}>
+                              Courses incoming for this pillar.
+                            </div>
                           )}
                         </div>
+                      )}
+                    </div>
+                  );
+                })}
 
-                        <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
-                          <span style={{ fontSize: 8, color: "#222", letterSpacing: 1 }}>
-                            {course.modules.length} modules
-                          </span>
-                          <span style={{ fontSize: 8, color: "#222", letterSpacing: 1 }}>
-                            +{course.xpReward} XP
-                          </span>
+                {/* Field Exercises */}
+                <div style={{ marginTop: 16 }}>
+                  <div style={{ fontSize: 7, letterSpacing: 4, color: "#8b5cf6", marginBottom: 8 }}>◆ FIELD EXERCISES</div>
+                  <div style={{ fontSize: 9, color: "#333", fontWeight: 300, marginBottom: 12 }}>
+                    Real-world scenarios. Dissect the mechanisms. Prove you can see the code in the wild.
+                  </div>
+
+                  {PSYCH_SECTIONS.map(section => {
+                    const pillarCourses = COURSES.filter(c => c.pillar === section.id);
+                    if (!pillarCourses.length) return null;
+                    const pillarColors = { psychology: "#dc2626", health: "#16a34a", seduction: "#8b5cf6", money: "#d4a017" };
+                    const pColor = pillarColors[section.id] || "#555";
+                    const scenarioDescs = {
+                      psychology: "Manipulation, persuasion, frame control, dark psychology scenarios",
+                      health: "Dopamine traps, habit loops, neurochemical hijacking scenarios",
+                      seduction: "Social dynamics, attraction, subcommunication, ego state scenarios",
+                      money: "Sales interactions, pricing psychology, buyer manipulation scenarios",
+                    };
+
+                    return (
+                      <button key={section.id} onClick={() => {
+                        const course = pillarCourses[Math.floor(Math.random() * pillarCourses.length)];
+                        startScenarioLab(course);
+                      }} style={{
+                        width: "100%", textAlign: "left", padding: 12, marginBottom: 6,
+                        background: "#070707", border: `1px solid ${pColor}15`,
+                        borderRadius: 6, cursor: "pointer", fontFamily: "inherit",
+                        transition: "all 0.2s",
+                      }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <div>
+                            <div style={{ fontSize: 9, letterSpacing: 3, color: pColor, fontWeight: 400, marginBottom: 2 }}>
+                              {section.name}
+                            </div>
+                            <div style={{ fontSize: 8, color: "#333", fontWeight: 300 }}>
+                              {scenarioDescs[section.id]}
+                            </div>
+                          </div>
+                          <span style={{ fontSize: 10, color: `${pColor}44` }}>→</span>
                         </div>
                       </button>
                     );
                   })}
+
+                  <div style={{ fontSize: 8, color: "#1a1a1a", textAlign: "center", marginTop: 6, fontWeight: 300 }}>
+                    +50 XP per dissection
+                  </div>
                 </div>
-              );
-            })}
+
+                {/* Retake Assessment */}
+                <button onClick={() => { setView("psych"); setPsychSection(0); setPsychAnswers({}); }} style={{
+                  width: "100%", marginTop: 12, padding: 10, background: "transparent",
+                  border: "1px solid #0e0e0e", borderRadius: 6, color: "#222",
+                  cursor: "pointer", fontFamily: "inherit", fontSize: 7, letterSpacing: 2,
+                }}>
+                  RETAKE ASSESSMENT
+                </button>
+              </div>
+            )}
           </div>
         )}
 
         {/* ── COURSE DETAIL VIEW ── */}
-        {view === "courses" && activeCourse && !activeLesson && !quizState && !scenarioLab && (
+        {view === "train" && activeCourse && !activeLesson && !quizState && !scenarioLab && (
           <div style={{ animation: "fadeIn 0.5s ease" }}>
             <button onClick={() => setActiveCourse(null)} style={{
               background: "transparent", border: "none", color: "#333",
@@ -1907,7 +2057,7 @@ Requirements:
         )}
 
         {/* ── LESSON VIEW ── */}
-        {view === "courses" && activeLesson && (
+        {view === "train" && activeLesson && (
           <div style={{ animation: "fadeIn 0.5s ease" }}>
             <button onClick={() => { setActiveLesson(null); setLessonChat([]); setLessonChatInput(""); }} style={{
               background: "transparent", border: "none", color: "#333",
@@ -2505,147 +2655,6 @@ Requirements:
         )}
 
         {/* ════════════════════════════════════════════════════ */}
-        {/* PROFILE VIEW */}
-        {/* ════════════════════════════════════════════════════ */}
-        {view === "profile" && user.profile && (
-          <div style={{ animation: "fadeIn 0.5s ease" }}>
-            <div style={{ textAlign: "center", marginBottom: 24 }}>
-              <div style={{ fontSize: 40, color: currentRank.color, marginBottom: 8, opacity: 0.5 }}>{currentRank.icon}</div>
-              <div style={{ fontSize: 7, letterSpacing: 4, color: "#dc2626", marginBottom: 6 }}>CLASSIFIED DOCUMENT · EYES ONLY</div>
-              <div style={{ fontSize: 14, color: "#d0d0d0", fontWeight: 300, letterSpacing: 3, marginBottom: 4 }}>
-                PSYCHOLOGICAL PROFILE
-              </div>
-              <div style={{ fontSize: 9, color: "#222" }}>OPERATIVE: {user.name} · CLEARANCE: {currentRank.name}</div>
-            </div>
-
-            <div style={{ display: "grid", gap: 8 }}>
-              {PSYCH_SECTIONS.map(section => {
-                const value = user.profile[section.id];
-                const subs = user.profile._insights ? user.profile._insights[section.id] : null;
-                const getLabel = (v) => {
-                  if (v >= 85) return "EXCEPTIONAL";
-                  if (v >= 70) return "ADVANCED";
-                  if (v >= 55) return "DEVELOPING";
-                  if (v >= 40) return "BASELINE";
-                  return "UNDEVELOPED";
-                };
-                const pillarColors = { psychology: "#dc2626", health: "#16a34a", seduction: "#8b5cf6", money: "#d4a017" };
-                const pColor = pillarColors[section.id] || "#555";
-                return (
-                  <div key={section.id} style={{
-                    border: `1px solid ${pColor}15`, borderRadius: 6, padding: 16,
-                    background: "#070707",
-                  }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                      <span style={{ fontSize: 8, letterSpacing: 3, color: pColor }}>{section.name.split(" — ")[0]}</span>
-                      <span style={{ fontSize: 16, fontWeight: 200, color: pColor }}>{value}%</span>
-                    </div>
-                    <div style={{ height: 3, background: "#111", borderRadius: 2, marginBottom: 8 }}>
-                      <div style={{
-                        height: "100%", width: `${value}%`,
-                        background: pColor, borderRadius: 2, transition: "width 0.8s", opacity: 0.5,
-                      }} />
-                    </div>
-                    <div style={{ fontSize: 7, color: "#333", letterSpacing: 2, marginBottom: subs ? 8 : 0 }}>
-                      {getLabel(value)}
-                    </div>
-
-                    {/* Sub-dimensions */}
-                    {subs && (
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 6 }}>
-                        {Object.entries(subs).filter(([k]) => k !== "scenarios").map(([key, val]) => (
-                          <span key={key} style={{
-                            fontSize: 7, padding: "2px 6px", borderRadius: 3, letterSpacing: 1,
-                            background: val >= 65 ? "#16a34a10" : val >= 40 ? "#d4a01710" : "#dc262610",
-                            border: `1px solid ${val >= 65 ? "#16a34a22" : val >= 40 ? "#d4a01722" : "#dc262622"}`,
-                            color: val >= 65 ? "#16a34a" : val >= 40 ? "#d4a017" : "#dc2626",
-                          }}>
-                            {key}: {val}%
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Flags */}
-            {user.profile._flags && (
-              <div style={{ marginTop: 12 }}>
-                {user.profile._flags.strengths.length > 0 && (
-                  <div style={{ border: "1px solid #16a34a15", borderRadius: 6, padding: 12, background: "#070707", marginBottom: 6 }}>
-                    <div style={{ fontSize: 7, letterSpacing: 3, color: "#16a34a", marginBottom: 6 }}>◈ IDENTIFIED STRENGTHS</div>
-                    {user.profile._flags.strengths.map((s, i) => (
-                      <div key={i} style={{ fontSize: 9, color: "#555", fontWeight: 300, marginBottom: 3 }}>• {s}</div>
-                    ))}
-                  </div>
-                )}
-                {user.profile._flags.weaknesses.length > 0 && (
-                  <div style={{ border: "1px solid #dc262615", borderRadius: 6, padding: 12, background: "#070707", marginBottom: 6 }}>
-                    <div style={{ fontSize: 7, letterSpacing: 3, color: "#dc2626", marginBottom: 6 }}>◈ CRITICAL WEAKNESSES</div>
-                    {user.profile._flags.weaknesses.map((s, i) => (
-                      <div key={i} style={{ fontSize: 9, color: "#555", fontWeight: 300, marginBottom: 3 }}>• {s}</div>
-                    ))}
-                  </div>
-                )}
-                {user.profile._flags.avoidances.length > 0 && (
-                  <div style={{ border: "1px solid #d4a01715", borderRadius: 6, padding: 12, background: "#070707", marginBottom: 6 }}>
-                    <div style={{ fontSize: 7, letterSpacing: 3, color: "#d4a017", marginBottom: 6 }}>◈ AVOIDANCE PATTERNS</div>
-                    {user.profile._flags.avoidances.map((s, i) => (
-                      <div key={i} style={{ fontSize: 9, color: "#555", fontWeight: 300, marginBottom: 3 }}>• {s}</div>
-                    ))}
-                  </div>
-                )}
-                {user.profile._flags.blindSpots.length > 0 && (
-                  <div style={{ border: "1px solid #8b5cf615", borderRadius: 6, padding: 12, background: "#070707", marginBottom: 6 }}>
-                    <div style={{ fontSize: 7, letterSpacing: 3, color: "#8b5cf6", marginBottom: 6 }}>◈ BLIND SPOTS</div>
-                    {user.profile._flags.blindSpots.map((s, i) => (
-                      <div key={i} style={{ fontSize: 9, color: "#555", fontWeight: 300, marginBottom: 3 }}>• {s}</div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            <div style={{
-              marginTop: 12, padding: 14, border: "1px solid #0e0e0e",
-              borderRadius: 8, background: "#070707",
-            }}>
-              <div style={{ fontSize: 8, letterSpacing: 3, color: "#333", marginBottom: 6 }}>SYSTEM CALIBRATION STATUS</div>
-              <div style={{ fontSize: 9, color: "#444", lineHeight: 1.8, fontWeight: 300 }}>
-                AI teacher calibrated to your architecture. It will push hardest on your weaknesses and blind spots. It will track everything you discuss and test your understanding in real time. It will not let you coast.
-              </div>
-            </div>
-
-            <button onClick={() => { setView("psych"); setPsychSection(0); setPsychAnswers({}); }} style={{
-              width: "100%", marginTop: 12, padding: 12, background: "transparent",
-              border: "1px solid #111", borderRadius: 6, color: "#333",
-              cursor: "pointer", fontFamily: "inherit", fontSize: 8, letterSpacing: 2,
-            }}>
-              RETAKE ASSESSMENT
-            </button>
-          </div>
-        )}
-
-        {/* Profile view when no profile exists */}
-        {view === "profile" && !user.profile && (
-          <div style={{ animation: "fadeIn 0.5s ease", textAlign: "center", padding: "60px 0" }}>
-            <div style={{ fontSize: 36, color: "#1a1a1a", marginBottom: 16 }}>△</div>
-            <div style={{ fontSize: 11, color: "#333", letterSpacing: 2, marginBottom: 8 }}>NO PROFILE DETECTED</div>
-            <div style={{ fontSize: 9, color: "#222", marginBottom: 20, fontWeight: 300 }}>
-              Complete the psychological assessment to map your cognitive architecture.
-            </div>
-            <button onClick={() => { setView("psych"); setPsychSection(0); setPsychAnswers({}); }} style={{
-              padding: "12px 24px", background: "#dc262611", border: "1px solid #dc262622",
-              borderRadius: 6, color: "#dc2626", cursor: "pointer",
-              fontFamily: "inherit", fontSize: 9, letterSpacing: 2,
-            }}>
-              BEGIN PROFILING
-            </button>
-          </div>
-        )}
-
         {/* ════════════════════════════════════════════════════ */}
         {/* AI CHAT */}
         {/* ════════════════════════════════════════════════════ */}
@@ -2974,11 +2983,10 @@ Requirements:
         padding: "6px 8px", zIndex: 100,
         backdropFilter: "blur(12px)",
       }}>
-        <NavItem icon="◉" label="Hub" active={view === "hub"} onClick={() => { setView("hub"); setSubView(null); setActiveCourse(null); setActiveLesson(null); setQuizState(null); }} />
-        <NavItem icon="◧" label="Courses" active={view === "courses"} onClick={() => { setView("courses"); setActiveCourse(null); setActiveLesson(null); setQuizState(null); }} />
-        <NavItem icon="◈" label="Intel" active={view === "chat"} onClick={() => setView("chat")} />
-        <NavItem icon="◐" label="Profile" active={view === "profile" || view === "psych"} onClick={() => setView(user.profile ? "profile" : "psych")}
+        <NavItem icon="◉" label="Hub" active={view === "hub"} onClick={() => { setView("hub"); setSubView(null); setActiveCourse(null); setActiveLesson(null); setQuizState(null); setScenarioLab(null); }} />
+        <NavItem icon="◈" label="Train" active={view === "train" || view === "psych"} onClick={() => { setView(user.profile ? "train" : "psych"); setActiveCourse(null); setActiveLesson(null); setQuizState(null); setScenarioLab(null); }}
           notification={!user.profile} />
+        <NavItem icon="◐" label="Intel" active={view === "chat"} onClick={() => setView("chat")} />
         <NavItem icon="☗" label="Order" active={view === "ranks"} onClick={() => setView("ranks")} />
       </nav>
     </div>
