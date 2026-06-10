@@ -3437,23 +3437,6 @@ Requirements:
                   </div>
                 ))}
 
-                {/* Skool Link */}
-                <div style={{
-                  border: "1px solid #0e0e0e", borderRadius: 8, padding: 14,
-                  background: "#070707", marginBottom: 12, textAlign: "center",
-                }}>
-                  <div style={{ fontSize: 8, letterSpacing: 3, color: "#999", marginBottom: 6 }}>FULL INTELLIGENCE FILE</div>
-                  <div style={{ fontSize: 9, color: "#aaa", fontWeight: 300 }}>
-                    Access the complete lesson with videos, diagrams, and case studies on Skool
-                  </div>
-                  <div style={{
-                    marginTop: 8, fontSize: 9, color: "#dc2626", letterSpacing: 2,
-                    opacity: 0.6, fontWeight: 400,
-                  }}>
-                    → ACCESS ON SKOOL
-                  </div>
-                </div>
-
                 {/* In-Lesson AI Teacher */}
                 <SectionDivider text="AI TEACHER" />
                 <div style={{
@@ -3523,20 +3506,14 @@ Requirements:
                 </div>
               </div>
             ) : (
-              /* Fallback for lessons without content yet */
+              /* Fallback (all lessons currently have content; shown only if a new lesson is added without content) */
               <div style={{
                 border: "1px solid #0e0e0e", borderRadius: 8, padding: 24,
                 background: "#070707", marginBottom: 16, textAlign: "center",
               }}>
-                <div style={{ fontSize: 9, color: "#999", marginBottom: 8, letterSpacing: 2 }}>CONTENT INCOMING</div>
+                <div style={{ fontSize: 9, color: "#999", marginBottom: 8, letterSpacing: 2 }}>BRIEFING BEING FINALIZED</div>
                 <div style={{ fontSize: 10, color: "#aaa", lineHeight: 1.7, fontWeight: 300 }}>
-                  This lesson is being loaded into the intelligence system. Access the full version on Skool.
-                </div>
-                <div style={{
-                  marginTop: 12, fontSize: 9, color: "#dc2626", letterSpacing: 2,
-                  opacity: 0.6, fontWeight: 400,
-                }}>
-                  → ACCESS ON SKOOL
+                  This lesson's intelligence file is being written. Check back shortly — or ask the AI teacher below about the topic in the meantime.
                 </div>
               </div>
             )}
