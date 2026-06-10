@@ -659,6 +659,49 @@ const PSYCH_SECTIONS = [
       { id: 120, text: "I'd rather build a business around my psychology knowledge than get a high-paying job" },
     ]
   },
+  {
+    id: "character",
+    name: "THE SHADOW",
+    desc: "Your character architecture — the traits driving how you treat yourself and others. A self-reflection tool based on your own answers, NOT a clinical diagnosis.",
+    questions: [
+      // Narcissism — trait (5)
+      { id: 121, text: "I see myself as more capable or exceptional than most people around me" },
+      { id: 122, text: "It bothers me when I don't get the recognition I think I've earned" },
+      { id: 123, text: "I like being the center of attention" },
+      { id: 124, text: "I tend to feel I deserve more than others in the same position" },
+      { id: 125, text: "I find criticism hard to take without feeling it's unfair or beneath me" },
+      // Machiavellianism — trait (5)
+      { id: 126, text: "I keep my real intentions private until the timing suits me" },
+      { id: 127, text: "I'm comfortable using leverage and strategy to get what I want from people" },
+      { id: 128, text: "I believe almost anyone can be influenced if you understand what they want" },
+      { id: 129, text: "I plan several moves ahead in how I handle people" },
+      { id: 130, text: "I'll tell people what they want to hear if it moves me toward my goal" },
+      // Psychopathy — trait (boldness / low emotional reactivity / callousness) (5)
+      { id: 131, text: "I stay cold and calm in situations that rattle most people" },
+      { id: 132, text: "I don't sit with guilt for long after I've done something wrong" },
+      { id: 133, text: "I can switch off other people's distress when I need to focus" },
+      { id: 134, text: "I'm drawn to risk and intensity more than safety and routine" },
+      { id: 135, text: "Other people's feelings weigh on my decisions less than they do for most people" },
+      // Empathy (5)
+      { id: 136, text: "I feel what other people are feeling, almost automatically" },
+      { id: 137, text: "When someone is hurting, I'm genuinely moved to do something about it" },
+      { id: 138, text: "I find it easy to step into someone else's perspective" },
+      { id: 139, text: "I think carefully about the impact my actions have on other people" },
+      { id: 140, text: "I notice when someone is upset even when they're trying to hide it" },
+      // Impulse control / conscientiousness (5)
+      { id: 141, text: "I think before I act, even when I'm emotional" },
+      { id: 142, text: "I follow through on commitments even after the motivation fades" },
+      { id: 143, text: "I can give up something I want now for a bigger payoff later" },
+      { id: 144, text: "I keep my impulses in check rather than acting on every urge" },
+      { id: 145, text: "I hold my routines without needing anyone to push me" },
+      // Integrity / honesty-humility (5)
+      { id: 146, text: "I keep my word even when breaking it would benefit me" },
+      { id: 147, text: "I'd feel genuinely wrong exploiting someone who trusted me" },
+      { id: 148, text: "I try to be fair even when I could get away with not being" },
+      { id: 149, text: "I'm honest with people even when a lie would be easier" },
+      { id: 150, text: "I hold myself to the same standards I expect from others" },
+    ]
+  },
 ];
 
 const SCALE_LABELS = [
@@ -2047,6 +2090,10 @@ const buildProfileContext = (profile) => {
     });
   }
 
+  if (profile._insights && profile._insights.character) {
+    ctx += "\\n[CHARACTER/SHADOW TRAITS — these are self-reported personality tendencies on a spectrum, NOT a clinical or psychiatric diagnosis. Narcissism / Machiavellianism / Psychopathy are sub-clinical dark-triad traits; Empathy / ImpulseControl / Integrity are steadying traits. When the operative asks about these, give honest, balanced self-awareness: name real strengths AND the blind spots worth managing. Frame high dark-traits or low empathy as blind spots that can isolate him and damage trust — things to build awareness around, never as advantages for exploiting people. Do NOT coach him to use callousness or low empathy to harm or manipulate others. If he shows genuine distress about any of this, gently point him toward a licensed professional.]\\n";
+  }
+
   if (profile._flags) {
     const f = profile._flags;
     if (f.strengths.length) ctx += "\\nSTRENGTHS: " + f.strengths.join(". ") + "\\n";
@@ -2463,8 +2510,8 @@ export default function SilentOperators() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: [
-            { role: "user", content: `[CONTEXT: The operative is currently studying the lesson "${activeLesson.title}" from the course "${activeCourse.title}". Here is the lesson content:\n\n${contextText}\n\nAnswer their question based on this lesson. Stay in the operator voice. Be specific to the material.]` },
-            { role: "assistant", content: "Understood. I have the lesson loaded. Ready for the operative's question." },
+            { role: "user", content: `[TEACHING MODE. The operative is working through the lesson "${activeLesson.title}" from the course "${activeCourse.title}". Lesson content:\n\n${contextText}\n\nYou are actively TEACHING this lesson, not just answering. Respond to what he just said, correct him directly if he's off, then take it one level deeper. Keep checking that he actually understands, tie it to real situations he'd recognize, and ask whether he's seen it play out in his own life. Keep replies tight — a few sentences, then hand it back. Push hardest on his profile's flagged weaknesses. Operator voice — clinical, direct, lowercase is fine.]` },
+            { role: "assistant", content: "Understood. Continuing the lesson." },
             ...newMessages.map(m => ({ role: m.role, content: m.content })),
           ],
           profile: user.profile || null,
@@ -2481,6 +2528,43 @@ export default function SilentOperators() {
   };
 
   useEffect(() => { lessonChatRef.current?.scrollIntoView({ behavior: "smooth" }); }, [lessonChat, lessonTyping]);
+
+  // Auto-start the AI teacher the moment a lesson is opened
+  const autoTaughtRef = useRef(null);
+  const startLessonTeaching = async (lesson) => {
+    const lessonContent = LESSON_CONTENT[lesson.id];
+    if (!lessonContent) return;
+    setLessonChat([]);
+    setLessonTyping(true);
+    const contextText = lessonContent.sections.map(s => `${s.heading}: ${s.body}`).join("\n\n");
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [
+            { role: "user", content: `[TEACHING MODE — START NOW. The operative just opened the lesson "${lesson.title}" from the course "${activeCourse.title}". Lesson content:\n\n${contextText}\n\nBegin teaching immediately. Do NOT greet, do NOT wait to be asked. Open by naming what you're about to teach in one line, then teach the FIRST core idea in 3-5 sentences with a concrete, relatable example (audience: a sharp, ambitious young man 17-30). Then STOP and engage him: ask one pointed question that checks he actually grasped it, OR ask whether he's already seen this play out in his own life. Teach ONE idea at a time, then hand it back — you'll go deeper as he responds. Keep this first message under 110 words. Operator voice — clinical, direct, lowercase is fine. Adapt to his profile; lean on his flagged weaknesses.]` },
+            { role: "assistant", content: "Understood. Beginning the lesson now." },
+          ],
+          profile: user.profile || null,
+        }),
+      });
+      if (!res.ok) throw new Error("API error");
+      const data = await res.json();
+      setLessonChat([{ role: "assistant", content: data.response }]);
+    } catch (err) {
+      setLessonChat([{ role: "assistant", content: "Intelligence feed disrupted. Tap ASK below to begin the lesson." }]);
+    } finally {
+      setLessonTyping(false);
+    }
+  };
+  useEffect(() => {
+    if (activeLesson && LESSON_CONTENT[activeLesson.id] && autoTaughtRef.current !== activeLesson.id) {
+      autoTaughtRef.current = activeLesson.id;
+      startLessonTeaching(activeLesson);
+    }
+    if (!activeLesson) autoTaughtRef.current = null;
+  }, [activeLesson]);
 
   // ── SCENARIO LAB ──
   const startScenarioLab = async (course) => {
@@ -2592,6 +2676,7 @@ Requirements:
       const subDims = section.id === "psychology" ? ["identity", "shadow", "frameControl", "emotionalReg", "cognitive", "scenarios"]
         : section.id === "health" ? ["dopamine", "stress", "sleep", "physical", "addiction", "scenarios"]
         : section.id === "seduction" ? ["socialCalib", "readingPeople", "subcomm", "tension", "rapport", "scenarios"]
+        : section.id === "character" ? ["narcissism", "machiavellianism", "psychopathy", "empathy", "impulseControl", "integrity"]
         : ["risk", "delayedGrat", "selling", "valueCreation", "scarcity", "scenarios"];
 
       const subs = {};
@@ -3079,7 +3164,7 @@ Requirements:
                   </div>
                 </div>
 
-                {PSYCH_SECTIONS.map(section => {
+                {PSYCH_SECTIONS.filter(s => s.id !== "character").map(section => {
                   const value = user.profile[section.id];
                   const subs = user.profile._insights ? user.profile._insights[section.id] : null;
                   const pillarCourses = COURSES.filter(c => c.pillar === section.id);
@@ -3217,6 +3302,68 @@ Requirements:
                     </div>
                   );
                 })}
+
+                {/* Character Architecture Readout */}
+                {user.profile._insights && user.profile._insights.character && (() => {
+                  const c = user.profile._insights.character;
+                  const traits = [
+                    { key: "narcissism", label: "NARCISSISM", type: "dark",
+                      hi: "Fuels self-belief and drive. Blind spot: a pull toward needing admiration and rejecting criticism — it pushes people away and hides honest feedback from you. Keep people around who'll tell you the truth.",
+                      mid: "Healthy self-regard without tipping into needing constant validation.",
+                      lo: "Grounded and able to take criticism. Watch the flip side — back yourself, and claim the credit you've actually earned." },
+                    { key: "machiavellianism", label: "STRATEGIC / MACHIAVELLIAN", type: "dark",
+                      hi: "You see leverage and think several moves ahead. Blind spot: people eventually feel when they're being maneuvered, and it quietly burns trust. The strongest play is strategic AND straight.",
+                      mid: "Strategic when it counts without turning every interaction into a calculation.",
+                      lo: "Straightforward and easy to trust. Build the habit of thinking a few moves ahead so you're not caught flat-footed." },
+                    { key: "psychopathy", label: "PSYCHOPATHY (TRAIT)", type: "dark",
+                      hi: "Calm under fire, decisive when others freeze, drawn to intensity. Blind spot: detachment from people's feelings can isolate you and let you hurt others without noticing. Manage this one most deliberately — an asset in a crisis, a liability in a relationship.",
+                      mid: "You can stay cool under pressure without going cold on people.",
+                      lo: "You feel things and stay connected. Build the ability to go cold and decisive in the rare moments that genuinely demand it." },
+                    { key: "empathy", label: "EMPATHY", type: "pro",
+                      hi: "A real strength — you read and care about people, which builds genuine trust and loyalty. Just guard against being drained, or letting it be turned against you.",
+                      mid: "You connect with people without dissolving into their emotions.",
+                      lo: "Lets you make hard calls without flinching — but you'll miss people's signals and damage trust without realizing it. This is a skill you can build, not just a feeling you're stuck with." },
+                    { key: "impulseControl", label: "IMPULSE CONTROL", type: "pro",
+                      hi: "A major asset — discipline and delayed gratification are what compound over years. This is the engine under everything else.",
+                      mid: "Decent self-control; tighten it in the areas that matter most to you.",
+                      lo: "Acting on urges is costing you more than you think. This is the highest-leverage trait to build — everything else gets easier once it's in place." },
+                    { key: "integrity", label: "INTEGRITY", type: "pro",
+                      hi: "The foundation everything compounds on — people can rely on your word, which is rarer and worth more than any tactic.",
+                      mid: "Mostly solid; the edge cases are where reputations are actually made.",
+                      lo: "Cutting corners with people wins small and loses big. Worth confronting honestly — trust is the one asset you can't buy back once it's gone." },
+                  ];
+                  const frame = (t) => { const v = c[t.key] || 0; return v >= 60 ? t.hi : v >= 40 ? t.mid : t.lo; };
+                  const barColor = (t) => { const v = c[t.key] || 0; if (t.type === "dark") return v >= 60 ? "#d4a017" : "#555"; return v >= 60 ? "#16a34a" : v < 40 ? "#d4a017" : "#888"; };
+                  return (
+                    <div style={{ marginTop: 16 }}>
+                      <div style={{ fontSize: 7, letterSpacing: 4, color: "#8b5cf6", marginBottom: 8 }}>◆ CHARACTER ARCHITECTURE</div>
+                      <div style={{ border: "1px solid #1a1633", borderRadius: 8, padding: 16, background: "#070611" }}>
+                        <div style={{ fontSize: 11, color: "#cbbfff", letterSpacing: 1, marginBottom: 8, fontWeight: 300 }}>THE SHADOW READOUT</div>
+                        <div style={{ fontSize: 9, color: "#999", lineHeight: 1.7, fontWeight: 300, marginBottom: 14, paddingBottom: 12, borderBottom: "1px solid #15122b" }}>
+                          This is a mirror, not a verdict. It reflects the traits you reported about yourself, plotted as tendencies on a spectrum — not a clinical or psychiatric diagnosis. Everyone sits somewhere on every one of these. Read it for self-awareness: your genuine strengths, and the blind spots worth managing. If anything here actually worries you, talk it through with a licensed professional.
+                        </div>
+                        {traits.map(t => {
+                          const v = c[t.key] || 0;
+                          return (
+                            <div key={t.key} style={{ marginBottom: 14 }}>
+                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
+                                <span style={{ fontSize: 9, letterSpacing: 2, color: "#b9aef0", fontWeight: 400 }}>{t.label}</span>
+                                <span style={{ fontSize: 10, color: barColor(t), fontWeight: 500 }}>{v}</span>
+                              </div>
+                              <div style={{ height: 4, background: "#15122b", borderRadius: 2, overflow: "hidden", marginBottom: 6 }}>
+                                <div style={{ width: `${v}%`, height: "100%", background: barColor(t), transition: "width 0.6s" }} />
+                              </div>
+                              <div style={{ fontSize: 9, color: "#aaa", lineHeight: 1.65, fontWeight: 300 }}>{frame(t)}</div>
+                            </div>
+                          );
+                        })}
+                        <div style={{ fontSize: 8, color: "#777", lineHeight: 1.6, fontWeight: 300, marginTop: 4, paddingTop: 12, borderTop: "1px solid #15122b" }}>
+                          Amber marks a trait to manage — a dark-trait tendency running high, or a steadying trait running low. Green marks a steadying strength. None of this is fixed; the traits move as you do.
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 {/* Field Exercises */}
                 <div style={{ marginTop: 16 }}>
@@ -3447,16 +3594,16 @@ Requirements:
                     padding: "10px 14px", borderBottom: "1px solid #0a0a0a",
                     fontSize: 8, letterSpacing: 3, color: "#dc2626",
                   }}>
-                    ◈ ASK ABOUT THIS LESSON
+                    ◈ AI TEACHER · LIVE SESSION
                   </div>
 
                   <div style={{
                     maxHeight: 250, overflowY: "auto", padding: 12,
                   }}>
-                    {lessonChat.length === 0 && (
+                    {lessonChat.length === 0 && !lessonTyping && (
                       <div style={{ textAlign: "center", padding: "16px 0" }}>
                         <div style={{ fontSize: 9, color: "#888", fontWeight: 300 }}>
-                          Ask any question about this lesson. The AI teacher has the full content loaded.
+                          The teacher will start automatically. If it doesn't, ask anything below — the full lesson is loaded.
                         </div>
                       </div>
                     )}
