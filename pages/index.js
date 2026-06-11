@@ -2239,6 +2239,7 @@ export default function SilentOperators() {
   const [lessonChat, setLessonChat] = useState([]);
   const [lessonChatInput, setLessonChatInput] = useState("");
   const [lessonTyping, setLessonTyping] = useState(false);
+  const [lessonReady, setLessonReady] = useState(false);
   const lessonChatRef = useRef(null);
 
   // Scenario Lab
@@ -2510,7 +2511,7 @@ export default function SilentOperators() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: [
-            { role: "user", content: `[TEACHING MODE. The operative is working through the lesson "${activeLesson.title}" from the course "${activeCourse.title}". Lesson content:\n\n${contextText}\n\nYou are actively TEACHING this lesson, not just answering. Respond to what he just said, correct him directly if he's off, then take it one level deeper. Keep checking that he actually understands, tie it to real situations he'd recognize, and ask whether he's seen it play out in his own life. Keep replies tight — a few sentences, then hand it back. Push hardest on his profile's flagged weaknesses. Operator voice — clinical, direct, lowercase is fine.]` },
+            { role: "user", content: `[TEACHING MODE. The operative is working through the lesson "${activeLesson.title}" from the course "${activeCourse.title}". Lesson content:\n\n${contextText}\n\nYou are walking him through this conversationally, one idea at a time — not briefing him. HARD RULES: flowing prose only — NO headers, NO all-caps section labels, NO bold section titles, NO bullet lists, NO multi-topic walls of text. That formatting makes him feel info-dumped instead of guided; avoid it completely.\n\nRespond to exactly what he just said. Correct him directly if he's off, then take it ONE level deeper — a single new idea, set up and shown with a real example before you name it. Draw examples from ${exampleDomain(activeCourse.pillar)}. Keep checking he actually follows, tie it to situations from his world, and ask whether he's seen it play out in his own life. A few sentences, then hand it back to him — a back-and-forth, not a lecture. Push hardest on his profile's flagged weaknesses. Operator voice — direct, clinical, lowercase is fine.\n\nCOMPLETION: when (and ONLY when) he has clearly grasped the core idea of this lesson and engaged with it properly, end your message with the tag [[READY]] on its own line. Until then, never use the tag — keep teaching and testing him.]` },
             { role: "assistant", content: "Understood. Continuing the lesson." },
             ...newMessages.map(m => ({ role: m.role, content: m.content })),
           ],
@@ -2519,7 +2520,7 @@ export default function SilentOperators() {
       });
       if (!res.ok) throw new Error("API error");
       const data = await res.json();
-      setLessonChat(prev => [...prev, { role: "assistant", content: data.response }]);
+      setLessonChat(prev => [...prev, { role: "assistant", content: stripReady(data.response) }]);
     } catch (err) {
       setLessonChat(prev => [...prev, { role: "assistant", content: "Intelligence feed disrupted. Retry." }]);
     } finally {
@@ -2531,6 +2532,17 @@ export default function SilentOperators() {
 
   // Auto-start the AI teacher the moment a lesson is opened
   const autoTaughtRef = useRef(null);
+  const exampleDomain = (pillar) => pillar === "seduction"
+    ? "dating, attraction, reading people, and social dynamics"
+    : pillar === "money"
+    ? "business, sales, money, negotiation, and status"
+    : pillar === "health"
+    ? "training, energy, focus, sleep, and physical performance"
+    : "business, social influence, status, negotiation, and everyday power dynamics. Do NOT use dating or attraction examples in this pillar — those belong only in the Seduction track. Keep examples on-topic for this pillar";
+  const stripReady = (text) => {
+    if (typeof text === "string" && text.includes("[[READY]]")) { setLessonReady(true); return text.replace(/\[\[READY\]\]/g, "").trim(); }
+    return text;
+  };
   const startLessonTeaching = async (lesson) => {
     const lessonContent = LESSON_CONTENT[lesson.id];
     if (!lessonContent) return;
@@ -2543,7 +2555,7 @@ export default function SilentOperators() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: [
-            { role: "user", content: `[TEACHING MODE — START NOW. The operative just opened the lesson "${lesson.title}" from the course "${activeCourse.title}". Lesson content:\n\n${contextText}\n\nBegin teaching immediately. Do NOT greet, do NOT wait to be asked. Open by naming what you're about to teach in one line, then teach the FIRST core idea in 3-5 sentences with a concrete, relatable example (audience: a sharp, ambitious young man 17-30). Then STOP and engage him: ask one pointed question that checks he actually grasped it, OR ask whether he's already seen this play out in his own life. Teach ONE idea at a time, then hand it back — you'll go deeper as he responds. Keep this first message under 110 words. Operator voice — clinical, direct, lowercase is fine. Adapt to his profile; lean on his flagged weaknesses.]` },
+            { role: "user", content: `[TEACHING MODE — START NOW. The operative just opened the lesson "${lesson.title}" from the course "${activeCourse.title}". Lesson content:\n\n${contextText}\n\nYou are walking him THROUGH this, not briefing him. HARD RULES: flowing, conversational prose only — NO headers, NO all-caps section labels, NO bold section titles, NO bullet lists, NO multi-topic walls of text. That formatting is the exact thing to avoid; it makes him feel info-dumped instead of guided.\n\nOpen with ONE short line that picks up momentum and pulls him in — make it feel like a continuation, set the frame, then move into "here's the mechanism." Then teach the FIRST single idea only, building it like a thread: set it up, show it with a concrete example, THEN name it (show-then-name). Draw examples from ${exampleDomain(activeCourse.pillar)}. One idea — do NOT cover the whole lesson. Close on ONE specific, pointed question, ideally whether he's felt this play out in his own life. Under 130 words. He should finish feeling walked-through and pulled forward, like he was promised something worth staying for. Operator voice — direct, clinical, lowercase is fine. Lean on his profile's flagged weaknesses. Do NOT add any completion tag on this opening message.]` },
             { role: "assistant", content: "Understood. Beginning the lesson now." },
           ],
           profile: user.profile || null,
@@ -2551,9 +2563,39 @@ export default function SilentOperators() {
       });
       if (!res.ok) throw new Error("API error");
       const data = await res.json();
-      setLessonChat([{ role: "assistant", content: data.response }]);
+      setLessonChat([{ role: "assistant", content: stripReady(data.response) }]);
     } catch (err) {
-      setLessonChat([{ role: "assistant", content: "Intelligence feed disrupted. Tap ASK below to begin the lesson." }]);
+      setLessonChat([{ role: "assistant", content: "Intelligence feed disrupted. Tap TEACH ME to begin the lesson." }]);
+    } finally {
+      setLessonTyping(false);
+    }
+  };
+  const giveLessonExample = async () => {
+    if (!activeLesson) return;
+    const lessonContent = LESSON_CONTENT[activeLesson.id];
+    if (!lessonContent) return;
+    setLessonTyping(true);
+    const contextText = lessonContent.sections.map(s => `${s.heading}: ${s.body}`).join("\n\n");
+    const newMessages = [...lessonChat, { role: "user", content: "give me an example" }];
+    setLessonChat(newMessages);
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [
+            { role: "user", content: `[TEACHING MODE. Lesson "${activeLesson.title}" from "${activeCourse.title}". Lesson content:\n\n${contextText}\n\nThe operative wants a concrete EXAMPLE of what you're currently teaching. Give ONE vivid, specific, real-world example — a scene he can picture — drawn from ${exampleDomain(activeCourse.pillar)}. Flowing prose, no headers or lists. Walk him through how the mechanism plays out in that scene, then ask him a question that makes him apply it. Keep it tight. Operator voice, lowercase fine.]` },
+            { role: "assistant", content: "Understood. One concrete example." },
+            ...newMessages.map(m => ({ role: m.role, content: m.content })),
+          ],
+          profile: user.profile || null,
+        }),
+      });
+      if (!res.ok) throw new Error("API error");
+      const data = await res.json();
+      setLessonChat(prev => [...prev, { role: "assistant", content: stripReady(data.response) }]);
+    } catch (err) {
+      setLessonChat(prev => [...prev, { role: "assistant", content: "Intelligence feed disrupted. Retry." }]);
     } finally {
       setLessonTyping(false);
     }
@@ -2561,9 +2603,10 @@ export default function SilentOperators() {
   useEffect(() => {
     if (activeLesson && LESSON_CONTENT[activeLesson.id] && autoTaughtRef.current !== activeLesson.id) {
       autoTaughtRef.current = activeLesson.id;
+      setLessonReady(false);
       startLessonTeaching(activeLesson);
     }
-    if (!activeLesson) autoTaughtRef.current = null;
+    if (!activeLesson) { autoTaughtRef.current = null; setLessonReady(false); }
   }, [activeLesson]);
 
   // ── SCENARIO LAB ──
@@ -3458,8 +3501,23 @@ Requirements:
               </div>
             </div>
 
-            {activeCourse.modules.map((mod, mi) => (
+            {activeCourse.modules.map((mod, mi) => {
+              const total = activeCourse.modules.length;
+              const tiers = ["BEGINNER", "INTERMEDIATE", "ADVANCED"];
+              const tierColors = ["#16a34a", "#d4a017", "#dc2626"];
+              const tierIdx = total <= 1 ? 0 : Math.min(2, Math.floor((mi / total) * 3));
+              const prevTierIdx = mi === 0 ? -1 : Math.min(2, Math.floor(((mi - 1) / total) * 3));
+              const showTier = tierIdx !== prevTierIdx;
+              return (
               <div key={mod.id} style={{ marginBottom: 16, animation: `slideIn 0.3s ease ${mi * 0.1}s both` }}>
+                {showTier && (
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, margin: mi === 0 ? "0 0 14px" : "22px 0 14px" }}>
+                    <span style={{ fontSize: 8, letterSpacing: 4, color: tierColors[tierIdx], fontWeight: 700 }}>
+                      {tiers[tierIdx]}
+                    </span>
+                    <div style={{ flex: 1, height: 1, background: `${tierColors[tierIdx]}22` }} />
+                  </div>
+                )}
                 <div style={{
                   fontSize: 8, letterSpacing: 3, color: "#999",
                   marginBottom: 8, display: "flex", alignItems: "center", gap: 8,
@@ -3511,7 +3569,8 @@ Requirements:
                   );
                 })}
               </div>
-            ))}
+              );
+            })}
 
             {/* Field Exercise Button */}
             <SectionDivider text="FIELD EXERCISE" />
@@ -3560,61 +3619,42 @@ Requirements:
               </div>
             </div>
 
-            {/* Lesson Content */}
-            {LESSON_CONTENT[activeLesson.id] ? (
-              <div>
-                {LESSON_CONTENT[activeLesson.id].sections.map((section, si) => (
-                  <div key={si} style={{
-                    border: "1px solid #0e0e0e", borderRadius: 8, padding: 18,
-                    background: "#070707", marginBottom: 8,
-                    animation: `slideIn 0.3s ease ${si * 0.08}s both`,
-                  }}>
-                    <div style={{
-                      fontSize: 8, letterSpacing: 3, color: "#dc2626",
-                      marginBottom: 10, fontWeight: 500,
-                    }}>
-                      {section.heading}
-                    </div>
-                    <div style={{
-                      fontSize: 11, color: "#bbb", lineHeight: 1.9, fontWeight: 300,
-                      whiteSpace: "pre-wrap", letterSpacing: 0.2,
-                    }}>
-                      {section.body}
-                    </div>
-                  </div>
-                ))}
-
-                {/* In-Lesson AI Teacher */}
-                <SectionDivider text="AI TEACHER" />
+            {/* AI Teacher is the whole lesson now */}
+            {(() => {
+              const isCompleted = user.completedLessons.includes(activeLesson.id);
+              return (
+              <>
                 <div style={{
-                  border: "1px solid #0e0e0e", borderRadius: 8,
-                  background: "#050505", overflow: "hidden",
+                  border: `1px solid ${lessonReady ? "#16a34a22" : "#0e0e0e"}`, borderRadius: 8,
+                  background: "#050505", overflow: "hidden", marginBottom: 12,
                 }}>
                   <div style={{
                     padding: "10px 14px", borderBottom: "1px solid #0a0a0a",
-                    fontSize: 8, letterSpacing: 3, color: "#dc2626",
+                    display: "flex", justifyContent: "space-between", alignItems: "center",
                   }}>
-                    ◈ AI TEACHER · LIVE SESSION
+                    <span style={{ fontSize: 8, letterSpacing: 3, color: "#dc2626" }}>◈ AI TEACHER · LIVE SESSION</span>
+                    {isCompleted && <span style={{ fontSize: 7, letterSpacing: 2, color: "#16a34a" }}>✓ COMPLETED</span>}
                   </div>
 
-                  <div style={{
-                    maxHeight: 250, overflowY: "auto", padding: 12,
-                  }}>
+                  <div style={{ maxHeight: 400, minHeight: 220, overflowY: "auto", padding: 12 }}>
                     {lessonChat.length === 0 && !lessonTyping && (
-                      <div style={{ textAlign: "center", padding: "16px 0" }}>
-                        <div style={{ fontSize: 9, color: "#888", fontWeight: 300 }}>
-                          The teacher will start automatically. If it doesn't, ask anything below — the full lesson is loaded.
+                      <div style={{ textAlign: "center", padding: "30px 12px" }}>
+                        <div style={{ fontSize: 10, color: "#bbb", fontWeight: 300, lineHeight: 1.7, marginBottom: 6 }}>
+                          Your teacher is ready.
+                        </div>
+                        <div style={{ fontSize: 9, color: "#777", fontWeight: 300, lineHeight: 1.7 }}>
+                          Tap <span style={{ color: "#dc2626" }}>TEACH ME</span> to begin the walkthrough, or <span style={{ color: "#dc2626" }}>GIVE ME AN EXAMPLE</span>. You can reply and push back any time.
                         </div>
                       </div>
                     )}
                     {lessonChat.map((msg, i) => (
                       <div key={i} style={{ marginBottom: 10 }}>
-                        <div style={{ fontSize: 7, letterSpacing: 2, color: msg.role === "user" ? "#333" : "#dc2626", marginBottom: 3 }}>
-                          {msg.role === "user" ? "YOU" : "◈ SYSTEM"}
+                        <div style={{ fontSize: 7, letterSpacing: 2, color: msg.role === "user" ? "#444" : "#dc2626", marginBottom: 3 }}>
+                          {msg.role === "user" ? "YOU" : "◈ TEACHER"}
                         </div>
                         <div style={{
-                          fontSize: 9, lineHeight: 1.7, color: msg.role === "user" ? "#666" : "#888",
-                          padding: "8px 10px", background: msg.role === "user" ? "#080808" : "#060606",
+                          fontSize: 10, lineHeight: 1.8, color: msg.role === "user" ? "#888" : "#cfcfcf",
+                          padding: "10px 12px", background: msg.role === "user" ? "#080808" : "#0a0a0a",
                           border: "1px solid #0e0e0e", borderRadius: 4,
                           whiteSpace: "pre-wrap", fontWeight: 300,
                         }}>
@@ -3624,18 +3664,36 @@ Requirements:
                     ))}
                     {lessonTyping && (
                       <div style={{ fontSize: 9, color: "#999", padding: "8px 10px", animation: "pulse 1.5s infinite" }}>
-                        ▌ Processing...
+                        ▌ Teaching...
                       </div>
                     )}
                     <div ref={lessonChatRef} />
                   </div>
 
-                  <div style={{ display: "flex", gap: 4, padding: 8, borderTop: "1px solid #0a0a0a" }}>
+                  {/* Quick actions */}
+                  <div style={{ display: "flex", gap: 6, padding: "8px 8px 0" }}>
+                    <button onClick={() => { setLessonReady(false); startLessonTeaching(activeLesson); }} disabled={lessonTyping} style={{
+                      flex: 1, padding: "9px 0", background: "#dc262611", border: "1px solid #dc262633",
+                      borderRadius: 4, color: "#dc2626", cursor: lessonTyping ? "default" : "pointer",
+                      fontFamily: "inherit", fontSize: 8, letterSpacing: 2, fontWeight: 600, opacity: lessonTyping ? 0.4 : 1,
+                    }}>
+                      ◈ TEACH ME
+                    </button>
+                    <button onClick={giveLessonExample} disabled={lessonTyping} style={{
+                      flex: 1, padding: "9px 0", background: "#8b5cf611", border: "1px solid #8b5cf633",
+                      borderRadius: 4, color: "#8b5cf6", cursor: lessonTyping ? "default" : "pointer",
+                      fontFamily: "inherit", fontSize: 8, letterSpacing: 2, fontWeight: 600, opacity: lessonTyping ? 0.4 : 1,
+                    }}>
+                      ◆ GIVE ME AN EXAMPLE
+                    </button>
+                  </div>
+
+                  <div style={{ display: "flex", gap: 4, padding: 8 }}>
                     <input
                       value={lessonChatInput}
                       onChange={(e) => setLessonChatInput(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendLessonMessage()}
-                      placeholder="Ask about this lesson..."
+                      placeholder="Reply to the teacher, or ask anything..."
                       style={{
                         flex: 1, padding: "8px 10px", background: "#080808",
                         border: "1px solid #0e0e0e", borderRadius: 4,
@@ -3643,42 +3701,42 @@ Requirements:
                       }}
                     />
                     <button onClick={sendLessonMessage} style={{
-                      padding: "8px 14px", background: "#dc2626", border: "none",
-                      borderRadius: 4, color: "#000", cursor: "pointer",
+                      padding: "8px 14px", background: "#1a1a1a", border: "1px solid #2a2a2a",
+                      borderRadius: 4, color: "#ccc", cursor: "pointer",
                       fontFamily: "inherit", fontSize: 8, letterSpacing: 2, fontWeight: 600,
                     }}>
-                      ASK
+                      SEND
                     </button>
                   </div>
                 </div>
-              </div>
-            ) : (
-              /* Fallback (all lessons currently have content; shown only if a new lesson is added without content) */
-              <div style={{
-                border: "1px solid #0e0e0e", borderRadius: 8, padding: 24,
-                background: "#070707", marginBottom: 16, textAlign: "center",
-              }}>
-                <div style={{ fontSize: 9, color: "#999", marginBottom: 8, letterSpacing: 2 }}>BRIEFING BEING FINALIZED</div>
-                <div style={{ fontSize: 10, color: "#aaa", lineHeight: 1.7, fontWeight: 300 }}>
-                  This lesson's intelligence file is being written. Check back shortly — or ask the AI teacher below about the topic in the meantime.
-                </div>
-              </div>
-            )}
 
-            {/* Complete Button */}
-            <button onClick={() => {
-              setUser(prev => ({ ...prev, completedLessons: [...prev.completedLessons, activeLesson.id] }));
-              addXP(30);
-              setActiveLesson(null);
-              setLessonChat([]);
-            }} style={{
-              width: "100%", padding: 14, marginTop: 12,
-              background: "#16a34a11", border: "1px solid #16a34a22",
-              borderRadius: 6, color: "#16a34a", cursor: "pointer",
-              fontFamily: "inherit", fontSize: 9, letterSpacing: 3, fontWeight: 400,
-            }}>
-              MARK AS COMPLETE · +30 XP
-            </button>
+                {/* Mark complete — highlights when the teacher signals readiness; stays accessible after */}
+                {isCompleted ? (
+                  <div style={{
+                    width: "100%", padding: 14, marginTop: 4, textAlign: "center",
+                    background: "#16a34a0d", border: "1px solid #16a34a22",
+                    borderRadius: 6, color: "#16a34a", fontSize: 9, letterSpacing: 2, fontWeight: 400,
+                  }}>
+                    ✓ LESSON COMPLETE · revisit any time — it stays unlocked
+                  </div>
+                ) : (
+                  <button onClick={() => {
+                    setUser(prev => ({ ...prev, completedLessons: [...new Set([...prev.completedLessons, activeLesson.id])] }));
+                    addXP(30);
+                  }} style={{
+                    width: "100%", padding: 14, marginTop: 4,
+                    background: lessonReady ? "#16a34a22" : "#16a34a0d",
+                    border: `1px solid ${lessonReady ? "#16a34a55" : "#16a34a22"}`,
+                    borderRadius: 6, color: "#16a34a", cursor: "pointer",
+                    fontFamily: "inherit", fontSize: 9, letterSpacing: 2, fontWeight: lessonReady ? 600 : 400,
+                    animation: lessonReady ? "pulse 2s infinite" : "none",
+                  }}>
+                    {lessonReady ? "✓ THE TEACHER SAYS YOU'RE READY · MARK COMPLETE · +30 XP" : "MARK AS COMPLETE · +30 XP"}
+                  </button>
+                )}
+              </>
+              );
+            })()}
           </div>
         )}
 
