@@ -2465,6 +2465,7 @@ export default function SilentOperators() {
   // ── AI CHAT ──
   const sendMessage = async () => {
     if (!chatInput.trim()) return;
+    if (isTyping) return;
     const userMsg = chatInput.trim();
     setChatInput("");
     const newMessages = [...chatMessages, { role: "user", content: userMsg }];
@@ -2478,9 +2479,14 @@ export default function SilentOperators() {
         body: JSON.stringify({
           messages: newMessages.map(m => ({ role: m.role, content: m.content })),
           profile: user.profile || null,
+          mode: "intel",
         }),
       });
 
+      if (res.status === 429) {
+        setChatMessages(prev => [...prev, { role: "assistant", content: "Channel saturated. You're querying faster than the feed allows. Hold a moment, then continue." }]);
+        return;
+      }
       if (!res.ok) throw new Error("API error");
 
       const data = await res.json();
@@ -2496,6 +2502,7 @@ export default function SilentOperators() {
   // ── LESSON AI CHAT ──
   const sendLessonMessage = async () => {
     if (!lessonChatInput.trim() || !activeLesson) return;
+    if (lessonTyping) return;
     const userMsg = lessonChatInput.trim();
     setLessonChatInput("");
     const newMessages = [...lessonChat, { role: "user", content: userMsg }];
@@ -2516,8 +2523,10 @@ export default function SilentOperators() {
             ...newMessages.map(m => ({ role: m.role, content: m.content })),
           ],
           profile: user.profile || null,
+          mode: "lesson",
         }),
       });
+      if (res.status === 429) { setLessonChat(prev => [...prev, { role: "assistant", content: "Channel saturated. Ease off for a moment, then keep going." }]); return; }
       if (!res.ok) throw new Error("API error");
       const data = await res.json();
       setLessonChat(prev => [...prev, { role: "assistant", content: stripReady(data.response) }]);
@@ -2559,8 +2568,10 @@ export default function SilentOperators() {
             { role: "assistant", content: "Understood. Beginning the lesson now." },
           ],
           profile: user.profile || null,
+          mode: "lesson",
         }),
       });
+      if (res.status === 429) { setLessonChat([{ role: "assistant", content: "Channel saturated. Give it a moment, then tap TEACH ME again." }]); return; }
       if (!res.ok) throw new Error("API error");
       const data = await res.json();
       setLessonChat([{ role: "assistant", content: stripReady(data.response) }]);
@@ -2574,6 +2585,7 @@ export default function SilentOperators() {
     if (!activeLesson) return;
     const lessonContent = LESSON_CONTENT[activeLesson.id];
     if (!lessonContent) return;
+    if (lessonTyping) return;
     setLessonTyping(true);
     const contextText = lessonContent.sections.map(s => `${s.heading}: ${s.body}`).join("\n\n");
     const newMessages = [...lessonChat, { role: "user", content: "give me an example" }];
@@ -2589,8 +2601,10 @@ export default function SilentOperators() {
             ...newMessages.map(m => ({ role: m.role, content: m.content })),
           ],
           profile: user.profile || null,
+          mode: "lesson",
         }),
       });
+      if (res.status === 429) { setLessonChat(prev => [...prev, { role: "assistant", content: "Channel saturated. Ease off for a moment, then ask again." }]); return; }
       if (!res.ok) throw new Error("API error");
       const data = await res.json();
       setLessonChat(prev => [...prev, { role: "assistant", content: stripReady(data.response) }]);
@@ -2631,8 +2645,10 @@ Requirements:
 - Keep the scenario under 200 words. Make it realistic, not textbook.` },
           ],
           profile: user.profile || null,
+          mode: "lesson",
         }),
       });
+      if (res.status === 429) { setScenarioLab(prev => ({ ...prev, scenario: "Channel saturated. Wait a moment, then reopen the lab.", chat: [{ role: "assistant", content: "Channel saturated. Wait a moment, then reopen the lab." }], typing: false })); return; }
       if (!res.ok) throw new Error("API error");
       const data = await res.json();
       setScenarioLab(prev => ({
@@ -2653,6 +2669,7 @@ Requirements:
 
   const sendScenarioResponse = async () => {
     if (!scenarioLab || !scenarioLab.input.trim()) return;
+    if (scenarioLab.typing) return;
     const userMsg = scenarioLab.input.trim();
     const newChat = [...scenarioLab.chat, { role: "user", content: userMsg }];
     setScenarioLab(prev => ({ ...prev, chat: newChat, input: "", typing: true }));
@@ -2674,8 +2691,10 @@ Requirements:
             ...newChat.map(m => ({ role: m.role, content: m.content })),
           ],
           profile: user.profile || null,
+          mode: "lesson",
         }),
       });
+      if (res.status === 429) { setScenarioLab(prev => ({ ...prev, chat: [...prev.chat, { role: "assistant", content: "Channel saturated. Ease off for a moment, then submit again." }], typing: false })); return; }
       if (!res.ok) throw new Error("API error");
       const data = await res.json();
       setScenarioLab(prev => ({
