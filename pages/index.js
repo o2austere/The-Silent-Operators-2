@@ -2257,91 +2257,135 @@ export default function SilentOperators() {
   const [nameInput, setNameInput] = useState("");
   const [authError, setAuthError] = useState("");
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [accessCodeInput, setAccessCodeInput] = useState("");
+  const [authBusy, setAuthBusy] = useState(false);
+  const sessionRef = useRef(null);   // { username, token }
+  const syncTimerRef = useRef(null); // debounce handle for server sync
 
-  // Simple hash for password (not cryptographically secure, but gates casual access)
-  const hashPassword = (pw) => {
-    let hash = 0;
-    for (let i = 0; i < pw.length; i++) {
-      const char = pw.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash;
-    }
-    return String(hash);
-  };
-
-  // Load saved data on mount
+  // Load cached data + restore session on mount (pulls latest progress from server)
   useEffect(() => {
-    try {
-      const savedPw = localStorage.getItem("oe_password");
-      const savedUser = localStorage.getItem("oe_user");
-      if (savedUser) {
-        const parsed = JSON.parse(savedUser);
-        setUser(prev => ({ ...prev, ...parsed }));
-      }
-      if (savedPw) {
-        setAuthState("login");
+    (async () => {
+      let cachedUser = null;
+      try {
+        const savedUser = localStorage.getItem("oe_user");
+        if (savedUser) { cachedUser = JSON.parse(savedUser); setUser(prev => ({ ...prev, ...cachedUser })); }
+      } catch (e) {}
+      let session = null;
+      try { const s = localStorage.getItem("oe_session"); if (s) session = JSON.parse(s); } catch (e) {}
+      if (session && session.username && session.token) {
+        sessionRef.current = session;
+        try {
+          const res = await fetch("/api/account", {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "load", username: session.username, token: session.token }),
+          });
+          if (res.ok) {
+            const j = await res.json();
+            if (j.data && Object.keys(j.data).length) setUser(prev => ({ ...prev, ...j.data }));
+            setAuthState("authed");
+          } else if (res.status === 401) {
+            sessionRef.current = null;
+            try { localStorage.removeItem("oe_session"); } catch (e) {}
+            setAuthState("login");
+          } else {
+            setAuthState("authed"); // server hiccup — run on cached data
+          }
+        } catch (e) {
+          setAuthState("authed"); // offline — run on cached data
+        }
       } else {
-        setAuthState("signup");
+        setAuthState(cachedUser ? "login" : "signup");
       }
-    } catch (e) {
-      setAuthState("signup");
-    }
-    setDataLoaded(true);
+      setDataLoaded(true);
+    })();
   }, []);
 
-  // Save user data whenever it changes (after initial load and auth)
+  // Persist locally immediately + sync to server (debounced) when signed in
   useEffect(() => {
-    if (dataLoaded && authState === "authed") {
-      try {
-        localStorage.setItem("oe_user", JSON.stringify(user));
-      } catch (e) {}
+    if (!dataLoaded || authState !== "authed") return;
+    try { localStorage.setItem("oe_user", JSON.stringify(user)); } catch (e) {}
+    const session = sessionRef.current;
+    if (session && session.username && session.token) {
+      if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
+      syncTimerRef.current = setTimeout(() => {
+        fetch("/api/account", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "save", username: session.username, token: session.token, data: user }),
+        }).catch(() => {});
+      }, 1500);
     }
   }, [user, dataLoaded, authState]);
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     setAuthError("");
-    if (!nameInput.trim()) { setAuthError("Enter your operative name"); return; }
+    const uname = nameInput.trim().toLowerCase();
+    if (uname.length < 3) { setAuthError("Codename must be at least 3 characters"); return; }
+    if (!/^[a-z0-9_]+$/.test(uname)) { setAuthError("Codename: letters, numbers, underscore only"); return; }
     if (passwordInput.length < 4) { setAuthError("Password must be at least 4 characters"); return; }
     if (passwordInput !== confirmPasswordInput) { setAuthError("Passwords do not match"); return; }
+    if (!accessCodeInput.trim()) { setAuthError("Enter your access code"); return; }
+    setAuthBusy(true);
     try {
-      localStorage.setItem("oe_password", hashPassword(passwordInput));
-      const newUser = { ...user, name: nameInput.trim().toUpperCase() };
-      localStorage.setItem("oe_user", JSON.stringify(newUser));
-      setUser(newUser);
+      const seedUser = { ...user, name: nameInput.trim().toUpperCase() };
+      const res = await fetch("/api/account", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "register", username: uname, password: passwordInput, accessCode: accessCodeInput.trim(), data: seedUser }),
+      });
+      const j = await res.json().catch(() => ({}));
+      if (!res.ok) { setAuthError(j.error || "Could not create account"); setAuthBusy(false); return; }
+      const session = { username: uname, token: j.token };
+      sessionRef.current = session;
+      try { localStorage.setItem("oe_session", JSON.stringify(session)); } catch (e) {}
+      setUser(seedUser);
       setAuthState("authed");
-      setPasswordInput(""); setConfirmPasswordInput(""); setAuthError("");
+      setPasswordInput(""); setConfirmPasswordInput(""); setAccessCodeInput(""); setAuthError("");
     } catch (e) {
-      setAuthError("Storage unavailable. Enable cookies/storage for this site.");
+      setAuthError("Network error. Try again.");
     }
+    setAuthBusy(false);
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setAuthError("");
+    const uname = nameInput.trim().toLowerCase();
+    if (!uname) { setAuthError("Enter your codename"); return; }
+    if (!passwordInput) { setAuthError("Enter your password"); return; }
+    setAuthBusy(true);
     try {
-      const savedPw = localStorage.getItem("oe_password");
-      if (hashPassword(passwordInput) === savedPw) {
-        setAuthState("authed");
-        setPasswordInput(""); setAuthError("");
-      } else {
-        setAuthError("Incorrect password");
-      }
+      const res = await fetch("/api/account", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "login", username: uname, password: passwordInput }),
+      });
+      const j = await res.json().catch(() => ({}));
+      if (!res.ok) { setAuthError(j.error || "Login failed"); setAuthBusy(false); return; }
+      const session = { username: uname, token: j.token };
+      sessionRef.current = session;
+      try { localStorage.setItem("oe_session", JSON.stringify(session)); } catch (e) {}
+      if (j.data && Object.keys(j.data).length) setUser(prev => ({ ...prev, ...j.data }));
+      setAuthState("authed");
+      setPasswordInput(""); setAuthError("");
     } catch (e) {
-      setAuthError("Storage error");
+      setAuthError("Network error. Try again.");
     }
+    setAuthBusy(false);
   };
 
   const handleResetAccount = () => {
+    // Log out of this device. The account and its progress stay safe on the
+    // server — logging back in restores everything.
     try {
-      localStorage.removeItem("oe_password");
+      localStorage.removeItem("oe_session");
       localStorage.removeItem("oe_user");
+      localStorage.removeItem("oe_password");
     } catch (e) {}
+    sessionRef.current = null;
     setUser({
       name: "OPERATIVE", xp: 250, level: 1, tokens: 50, profile: null,
       pillarScores: {}, completedLessons: [], completedQuizzes: {}, courseProgress: {},
       streak: 1, lastActiveDate: new Date().toDateString(), rankChallengesPassed: [],
     });
-    setAuthState("signup");
-    setPasswordInput(""); setConfirmPasswordInput(""); setNameInput(""); setAuthError("");
+    setAuthState("login");
+    setNameInput(""); setPasswordInput(""); setConfirmPasswordInput(""); setAccessCodeInput(""); setAuthError("");
   };
 
 
@@ -2869,6 +2913,15 @@ Requirements:
   // ═══════════════════════════════════════════════════════════════
   // AUTH GATE
   // ═══════════════════════════════════════════════════════════════
+  if (authState === "checking") {
+    return (
+      <div style={{ minHeight: "100vh", background: "#050505", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'JetBrains Mono', 'SF Mono', monospace" }}>
+        <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;300;400;500;600;700&display=swap" rel="stylesheet" />
+        <div style={{ fontSize: 9, letterSpacing: 4, color: "#444" }}>ESTABLISHING SECURE LINK…</div>
+      </div>
+    );
+  }
+
   if (authState !== "authed") {
     const isSignup = authState === "signup";
     return (
@@ -2892,21 +2945,23 @@ Requirements:
             border: "1px solid #1e1e1e", borderRadius: 10, padding: 24,
             background: "#0a0a0a",
           }}>
-            {isSignup && (
-              <div style={{ marginBottom: 14 }}>
-                <div style={{ fontSize: 8, letterSpacing: 2, color: "#888", marginBottom: 6 }}>OPERATIVE NAME</div>
-                <input
-                  value={nameInput}
-                  onChange={(e) => setNameInput(e.target.value)}
-                  placeholder="Choose your codename"
-                  style={{
-                    width: "100%", padding: "12px 14px", background: "#111",
-                    border: "1px solid #222", borderRadius: 6, color: "#e0e0e0",
-                    fontSize: 11, fontFamily: "inherit", boxSizing: "border-box",
-                  }}
-                />
-              </div>
-            )}
+            <div style={{ marginBottom: 14 }}>
+              <div style={{ fontSize: 8, letterSpacing: 2, color: "#888", marginBottom: 6 }}>CODENAME</div>
+              <input
+                value={nameInput}
+                onChange={(e) => setNameInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter" && !isSignup) handleLogin(); }}
+                placeholder="your login — letters, numbers, _"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                style={{
+                  width: "100%", padding: "12px 14px", background: "#111",
+                  border: "1px solid #222", borderRadius: 6, color: "#e0e0e0",
+                  fontSize: 11, fontFamily: "inherit", boxSizing: "border-box",
+                }}
+              />
+            </div>
 
             <div style={{ marginBottom: 14 }}>
               <div style={{ fontSize: 8, letterSpacing: 2, color: "#888", marginBottom: 6 }}>
@@ -2933,7 +2988,6 @@ Requirements:
                   type="password"
                   value={confirmPasswordInput}
                   onChange={(e) => setConfirmPasswordInput(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter") handleSignup(); }}
                   placeholder="Re-enter password"
                   style={{
                     width: "100%", padding: "12px 14px", background: "#111",
@@ -2944,35 +2998,54 @@ Requirements:
               </div>
             )}
 
+            {isSignup && (
+              <div style={{ marginBottom: 14 }}>
+                <div style={{ fontSize: 8, letterSpacing: 2, color: "#888", marginBottom: 6 }}>ACCESS CODE</div>
+                <input
+                  type="password"
+                  value={accessCodeInput}
+                  onChange={(e) => setAccessCodeInput(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") handleSignup(); }}
+                  placeholder="from the members area"
+                  style={{
+                    width: "100%", padding: "12px 14px", background: "#111",
+                    border: "1px solid #222", borderRadius: 6, color: "#e0e0e0",
+                    fontSize: 11, fontFamily: "inherit", boxSizing: "border-box",
+                  }}
+                />
+                <div style={{ fontSize: 7, color: "#666", marginTop: 5, letterSpacing: 1, lineHeight: 1.5 }}>
+                  The code from the paid members area. Keeps signups locked to members.
+                </div>
+              </div>
+            )}
+
             {authError && (
               <div style={{ fontSize: 9, color: "#dc2626", marginBottom: 12, letterSpacing: 1 }}>
                 ⚠ {authError}
               </div>
             )}
 
-            <button onClick={isSignup ? handleSignup : handleLogin} style={{
-              width: "100%", padding: 13, background: "#dc2626", border: "none",
-              borderRadius: 6, color: "#fff", cursor: "pointer",
+            <button onClick={isSignup ? handleSignup : handleLogin} disabled={authBusy} style={{
+              width: "100%", padding: 13, background: authBusy ? "#3a1414" : "#dc2626", border: "none",
+              borderRadius: 6, color: "#fff", cursor: authBusy ? "default" : "pointer",
               fontFamily: "inherit", fontSize: 10, letterSpacing: 3, fontWeight: 600,
             }}>
-              {isSignup ? "INITIATE →" : "ENTER →"}
+              {authBusy ? "CONNECTING…" : (isSignup ? "INITIATE →" : "ENTER →")}
             </button>
 
-            {!isSignup && (
-              <button onClick={handleResetAccount} style={{
-                width: "100%", padding: 10, marginTop: 10, background: "transparent",
-                border: "none", color: "#aaa", cursor: "pointer",
-                fontFamily: "inherit", fontSize: 8, letterSpacing: 1,
-              }}>
-                Forgot password? Reset account (erases progress)
-              </button>
-            )}
+            <button onClick={() => { setAuthError(""); setPasswordInput(""); setConfirmPasswordInput(""); setAccessCodeInput(""); setAuthState(isSignup ? "login" : "signup"); }} style={{
+              width: "100%", padding: 10, marginTop: 10, background: "transparent",
+              border: "none", color: "#aaa", cursor: "pointer",
+              fontFamily: "inherit", fontSize: 8, letterSpacing: 1,
+            }}>
+              {isSignup ? "Already an operative? Log in" : "New here? Create an account →"}
+            </button>
           </div>
 
           <div style={{ fontSize: 7, color: "#aaa", textAlign: "center", marginTop: 16, lineHeight: 1.6, letterSpacing: 1 }}>
             {isSignup
-              ? "Your password and progress are stored on this device."
-              : "Welcome back, operative."}
+              ? "Your account syncs across every device. Log in anywhere to pick up where you left off."
+              : "Log in from any device to restore your profile and progress."}
           </div>
         </div>
         <style>{`@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } input::placeholder { color: #555; }`}</style>
@@ -3053,6 +3126,13 @@ Requirements:
           }}>
             {currentRank.icon}
           </div>
+          <button onClick={handleResetAccount} title="Log out — your progress is saved to your account" style={{
+            background: "transparent", border: "1px solid #111", borderRadius: 6,
+            padding: "6px 9px", cursor: "pointer", fontFamily: "inherit",
+            fontSize: 7, letterSpacing: 2, color: "#555",
+          }}>
+            ⏻ OUT
+          </button>
         </div>
       </header>
 
